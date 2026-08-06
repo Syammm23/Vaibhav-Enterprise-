@@ -1,55 +1,56 @@
 /* ================================================================
    VAIBHAV ENTERPRISE — script.js
+   Requires: components.js loaded first (provides WA_NUMBER, SVG, etc.)
    ================================================================ */
-const CFG = { waNumber: "918401572902" };
 
 /* —— 01. Navbar & Mobile Menu —— */
 function initNav() {
-  const nav = document.getElementById("mainNav");
-  if (nav)
-    window.addEventListener("scroll", () =>
-      nav.classList.toggle("scrolled", window.scrollY > 50),
+  const nav = document.getElementById('mainNav');
+  if (nav) {
+    window.addEventListener('scroll', () =>
+      nav.classList.toggle('scrolled', window.scrollY > 50)
     );
+  }
 }
 
 function toggleMenu() {
-  document.getElementById("mobileMenu")?.classList.toggle("open");
-  document.getElementById("hamburger")?.classList.toggle("open");
+  document.getElementById('mobileMenu')?.classList.toggle('open');
+  document.getElementById('hamburger')?.classList.toggle('open');
 }
 
 function closeMobileMenu() {
-  document.getElementById("mobileMenu")?.classList.remove("open");
-  document.getElementById("hamburger")?.classList.remove("open");
+  document.getElementById('mobileMenu')?.classList.remove('open');
+  document.getElementById('hamburger')?.classList.remove('open');
 }
 
 /* —— 02. Scroll Reveal & Stats Counter —— */
 function initReveal() {
-  const els = document.querySelectorAll(".reveal");
+  const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
   const obs = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
-          e.target.classList.add("active");
+          e.target.classList.add('active');
           obs.unobserve(e.target);
         }
       });
     },
-    { threshold: 0.1 },
+    { threshold: 0.1 }
   );
   els.forEach((el) => obs.observe(el));
 }
 
 function initCounter() {
-  const nums = document.querySelectorAll("[data-target]");
+  const nums = document.querySelectorAll('[data-target]');
   if (!nums.length) return;
   const obs = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
-        const el = e.target,
-          target = +el.dataset.target,
-          suffix = el.dataset.suffix ?? "+";
+        const el = e.target;
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix ?? '+';
         let cur = 0;
         const t = setInterval(() => {
           cur += target / 60;
@@ -62,7 +63,7 @@ function initCounter() {
         obs.unobserve(el);
       });
     },
-    { threshold: 0.5 },
+    { threshold: 0.5 }
   );
   nums.forEach((el) => obs.observe(el));
 }
@@ -73,88 +74,91 @@ function changeBagColor(imgId, newImageSrc) {
   if (imgElement) imgElement.src = newImageSrc;
 }
 
-/* —— 04. Gallery Strip (Infinite Scroll) —— */
+/* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
-  { img: "images/D-cut-black.png", alt: "Black D-Cut Bag" },
-  { img: "images/D-cut-blue.png", alt: "Blue D-Cut Bag" },
-  { img: "images/D-cut-Brown.png", alt: "Brown D-Cut Bag" },
-  { img: "images/D-cut-green.png", alt: "Green D-Cut Bag" },
-  { img: "images/D-cut-Pink.png", alt: "Pink D-Cut Bag" },
-  { img: "images/D-cut-red.png", alt: "Red D-Cut Bag" },
-  { img: "images/D-cut-yellow.png", alt: "Yellow D-Cut Bag" },
-  { img: "images/w-cut-white.png", alt: "White W-Cut Bag" },
-  { img: "images/W-cut.png", alt: "W-Cut Bag" },
-  { img: "images/Box bag.png", alt: "Box Bag" },
-  { img: "images/loop handle.png", alt: "Loop Handle Bag" },
-  { img: "images/Manufacturing Unit.webp", alt: "Manufacturing Unit" },
+  { img: 'images/D-cut-black.png',         alt: 'Black D-Cut Bag' },
+  { img: 'images/D-cut-blue.png',          alt: 'Blue D-Cut Bag' },
+  { img: 'images/D-cut-Brown.png',         alt: 'Brown D-Cut Bag' },
+  { img: 'images/D-cut-green.png',         alt: 'Green D-Cut Bag' },
+  { img: 'images/D-cut-Pink.png',          alt: 'Pink D-Cut Bag' },
+  { img: 'images/D-cut-red.png',           alt: 'Red D-Cut Bag' },
+  { img: 'images/D-cut-yellow.png',        alt: 'Yellow D-Cut Bag' },
+  { img: 'images/w-cut-white.png',         alt: 'White W-Cut Bag' },
+  { img: 'images/W-cut.png',              alt: 'W-Cut Bag' },
+  { img: 'images/Box bag.png',            alt: 'Box Bag' },
+  { img: 'images/loop handle.png',        alt: 'Loop Handle Bag' },
+  { img: 'images/Manufacturing Unit.webp', alt: 'Manufacturing Unit' },
 ];
 
 function buildGalleryStrip() {
-  const track = document.getElementById("galleryTrack");
+  const track = document.getElementById('galleryTrack');
   if (!track) return;
   track.innerHTML = [...GALLERY_PHOTOS, ...GALLERY_PHOTOS]
     .map(
       (item) =>
-        `<div class="gallery-item"><img src="${item.img}" alt="${item.alt}"></div>`,
+        `<div class="gallery-item"><img src="${item.img}" alt="${item.alt}"></div>`
     )
-    .join("");
+    .join('');
 }
 
 /* —— 05. Unified Modal & WhatsApp Logic —— */
 function toggleModal(modalId, show) {
   const modal = document.getElementById(modalId);
   if (modal) {
-    modal.classList.toggle("open", show);
-    document.body.style.overflow = show ? "hidden" : "";
+    modal.classList.toggle('open', show);
+    document.body.style.overflow = show ? 'hidden' : '';
   }
 }
 
 function sendWA(msg) {
   window.open(
-    `https://wa.me/${CFG.waNumber}?text=${encodeURIComponent(msg)}`,
-    "_blank",
+    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,
+    '_blank'
   );
 }
 
 /* Auto Popup */
 function openAutoModal() {
-  toggleModal("autoEnquiryModal", true);
-  document.getElementById("peekingTab")?.classList.add("hidden");
+  toggleModal('autoEnquiryModal', true);
+  document.getElementById('peekingTab')?.classList.add('hidden');
 }
+
 function closeAutoModal() {
-  toggleModal("autoEnquiryModal", false);
-  document.getElementById("peekingTab")?.classList.remove("hidden");
+  toggleModal('autoEnquiryModal', false);
+  document.getElementById('peekingTab')?.classList.remove('hidden');
 }
 
 function submitAutoModal() {
-  const name = document.getElementById("autoName")?.value.trim(),
-    phone = document.getElementById("autoPhone")?.value.trim(),
-    req = document.getElementById("autoReq")?.value.trim();
-  if (!name || !phone) return alert("Please enter your name and phone number.");
-  sendWA(`Hi, I'm *${name}*.\nPhone: ${phone}\nRequirement: ${req || "N/A"}`);
+  const name  = document.getElementById('autoName')?.value.trim();
+  const phone = document.getElementById('autoPhone')?.value.trim();
+  const req   = document.getElementById('autoReq')?.value.trim();
+  if (!name || !phone) return alert('Please enter your name and phone number.');
+  sendWA(`Hi, I'm *${name}*.\nPhone: ${phone}\nRequirement: ${req || 'N/A'}`);
   closeAutoModal();
 }
 
 /* Quick Enquiry Modal */
-let _product = "";
+let _product = '';
+
 function openModal(productName) {
   _product = productName;
-  const lbl = document.getElementById("modalProductLabel");
+  const lbl = document.getElementById('modalProductLabel');
   if (lbl) lbl.textContent = productName;
-  toggleModal("enquiryModal", true);
+  toggleModal('enquiryModal', true);
 }
+
 function closeModal() {
-  toggleModal("enquiryModal", false);
+  toggleModal('enquiryModal', false);
 }
 
 function submitModal() {
-  const name = document.getElementById("mName")?.value.trim(),
-    phone = document.getElementById("mPhone")?.value.trim(),
-    qty = document.getElementById("mQty")?.value,
-    note = document.getElementById("mNote")?.value.trim();
-  if (!name || !phone) return alert("Please enter your name and phone number.");
+  const name  = document.getElementById('mName')?.value.trim();
+  const phone = document.getElementById('mPhone')?.value.trim();
+  const qty   = document.getElementById('mQty')?.value;
+  const note  = document.getElementById('mNote')?.value.trim();
+  if (!name || !phone) return alert('Please enter your name and phone number.');
   sendWA(
-    `Hi, I'm *${name}*.\nProduct: *${_product}*\nPhone: ${phone}\nQty: ${qty}\nNote: ${note || "N/A"}`,
+    `Hi, I'm *${name}*.\nProduct: *${_product}*\nPhone: ${phone}\nQty: ${qty}\nNote: ${note || 'N/A'}`
   );
   closeModal();
 }
@@ -164,16 +168,17 @@ function waEnquire(product) {
   sendWA(`Hi, I want to enquire about *${product}* from Vaibhav Enterprise.`);
 }
 
+/* Contact Page Form */
 function submitForm() {
-  const name = document.getElementById("cName")?.value.trim(),
-    phone = document.getElementById("cPhone")?.value.trim(),
-    email = document.getElementById("cEmail")?.value.trim(),
-    bagType = document.getElementById("cBagType")?.value,
-    qty = document.getElementById("cQty")?.value,
-    message = document.getElementById("cMessage")?.value.trim();
-  if (!name || !phone) return alert("Please provide Name and Phone number.");
+  const name    = document.getElementById('cName')?.value.trim();
+  const phone   = document.getElementById('cPhone')?.value.trim();
+  const email   = document.getElementById('cEmail')?.value.trim();
+  const bagType = document.getElementById('cBagType')?.value;
+  const qty     = document.getElementById('cQty')?.value;
+  const message = document.getElementById('cMessage')?.value.trim();
+  if (!name || !phone) return alert('Please provide Name and Phone number.');
   let waMsg = `Hi, I'm *${name}*.\nPhone: ${phone}`;
-  if (email) waMsg += `\nEmail: ${email}`;
+  if (email)   waMsg += `\nEmail: ${email}`;
   waMsg += `\nBag Type: *${bagType}*\nQuantity: ${qty}`;
   if (message) waMsg += `\nMessage: ${message}`;
   sendWA(waMsg);
@@ -181,76 +186,75 @@ function submitForm() {
 
 /* —— 06. Gallery Page Filters & Lightbox —— */
 function initGalleryFilter() {
-  document.querySelectorAll(".filter-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      document
-        .querySelectorAll(".filter-btn")
-        .forEach((b) => b.classList.remove("active"));
-      this.classList.add("active");
+  document.querySelectorAll('.filter-btn').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+      this.classList.add('active');
       const filter = this.dataset.filter;
       let visible = 0;
-      document.querySelectorAll(".g-item").forEach((item) => {
-        const show = filter === "all" || item.dataset.cat === filter;
-        item.style.display = show ? "" : "none";
+      document.querySelectorAll('.g-item').forEach((item) => {
+        const show = filter === 'all' || item.dataset.cat === filter;
+        item.style.display = show ? '' : 'none';
         if (show) visible++;
       });
-      const countEl = document.getElementById("galleryCount");
+      const countEl = document.getElementById('galleryCount');
       if (countEl) countEl.textContent = visible;
     });
   });
 }
 
 function initLightbox() {
-  const lb = document.getElementById("lightbox"),
-    lbImg = document.getElementById("lbImg");
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
   if (!lb || !lbImg) return;
 
-  document.querySelectorAll(".g-item").forEach((item) => {
-    item.addEventListener("click", function () {
-      const src = this.dataset.src || this.querySelector("img")?.src;
+  document.querySelectorAll('.g-item').forEach((item) => {
+    item.addEventListener('click', function () {
+      const src = this.dataset.src || this.querySelector('img')?.src;
       if (!src) return;
       lbImg.src = src;
-      toggleModal("lightbox", true);
+      toggleModal('lightbox', true);
     });
   });
 
-  const closeLb = () => toggleModal("lightbox", false);
-  document.getElementById("lbClose")?.addEventListener("click", closeLb);
-  lb.addEventListener("click", (e) => {
+  const closeLb = () => toggleModal('lightbox', false);
+  document.getElementById('lbClose')?.addEventListener('click', closeLb);
+  lb.addEventListener('click', (e) => {
     if (e.target === lb) closeLb();
   });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLb();
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLb();
   });
 }
 
-/* —— 07. Initialization —— */
-document.addEventListener("DOMContentLoaded", () => {
+/* —— 07. Splash Screen —— */
+function initSplash() {
+  const splash = document.getElementById('splashScreen');
+  if (!splash) return;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    splash.classList.add('hidden');
+    document.body.style.overflow = '';
+  }, 3400);
+}
+
+/* —— 08. Initialization —— */
+document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initReveal();
   initCounter();
+  initSplash();
   buildGalleryStrip();
   initGalleryFilter();
   initLightbox();
 
+  // Auto popup — show once per session after 3 seconds
   setTimeout(() => {
-    if (!sessionStorage.getItem("autoPopupShown")) {
+    if (!sessionStorage.getItem('autoPopupShown')) {
       openAutoModal();
-      sessionStorage.setItem("autoPopupShown", "true");
+      sessionStorage.setItem('autoPopupShown', 'true');
     } else {
-      document.getElementById("peekingTab")?.classList.remove("hidden");
+      document.getElementById('peekingTab')?.classList.remove('hidden');
     }
   }, 3000);
 });
- // Splash screen — hide after 3s + CSS fade
-      (function() {
-        var splash = document.getElementById('splashScreen');
-        if (!splash) return;
-        // After CSS animation ends (2.8s fade start + 0.6s duration = 3.4s)
-        setTimeout(function() {
-          splash.classList.add('hidden');
-          document.body.style.overflow = '';
-        }, 3400);
-        // Prevent scroll while splash is showing
-        document.body.style.overflow = 'hidden';
-      })();

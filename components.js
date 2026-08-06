@@ -1,13 +1,13 @@
 /* ================================================================
    VAIBHAV ENTERPRISE — components.js
    Shared HTML components injected into every page at runtime.
-   Reduces copy-paste across all 5 HTML files.
+   Loaded BEFORE script.js so DOM is ready for event listeners.
    ================================================================ */
 
 const WA_NUMBER  = '918401572902';
 const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20bags`;
 
-/* ── SVG Snippets ── */
+/* ── SVG Snippets (single source of truth) ── */
 const SVG = {
   whatsapp: `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
 
@@ -73,9 +73,9 @@ function buildNavbar() {
         ${SVG.whatsapp}
       </a>
 
-      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <button type="button" class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
         <span></span><span></span><span></span>
-      </div>
+      </button>
     </nav>
 
     <div class="mobile-menu" id="mobileMenu">
@@ -105,9 +105,9 @@ function buildFooter() {
           </div>
           <p>Manufacturing high-quality, eco-friendly non-woven bags with full customization options. Be Responsible — Choose Vaibhav.</p>
           <div class="footer-socials">
-            <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="social-btn">${SVG.whatsapp}</a>
-            <a href="https://www.instagram.com/vaibhaventerprise2902/" target="_blank" class="social-btn">${SVG.instagram}</a>
-            <a href="#" class="social-btn">${SVG.facebook}</a>
+            <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="social-btn" title="WhatsApp">${SVG.whatsapp}</a>
+            <a href="https://www.instagram.com/vaibhaventerprise2902/" target="_blank" class="social-btn" title="Instagram">${SVG.instagram}</a>
+            <a href="#" class="social-btn" title="Facebook">${SVG.facebook}</a>
           </div>
         </div>
 
@@ -182,15 +182,15 @@ function buildAutoPopup() {
         <h3>Request a Free Quote</h3>
         <p class="modal-sub">Drop your details — best wholesale price guaranteed.</p>
         <div class="form-grp">
-          <label>Full Name</label>
+          <label for="autoName">Full Name</label>
           <input type="text" id="autoName" placeholder="Enter your name" />
         </div>
         <div class="form-grp">
-          <label>Phone Number</label>
+          <label for="autoPhone">Phone Number</label>
           <input type="tel" id="autoPhone" placeholder="+91 XXXXX XXXXX" />
         </div>
         <div class="form-grp">
-          <label>Bag Requirement</label>
+          <label for="autoReq">Bag Requirement</label>
           <input type="text" id="autoReq" placeholder="e.g. 10,000 W-Cut Bags" />
         </div>
         <button class="form-submit btn-premium" onclick="submitAutoModal()">
@@ -202,11 +202,63 @@ function buildAutoPopup() {
 }
 
 /* ================================================================
-   INIT — runs before DOMContentLoaded to inject HTML
+   ENQUIRY MODAL (used on index.html & products.html)
 ================================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  buildNavbar();
-  buildFooter();
-  buildWaFloat();
-  buildAutoPopup();
-});
+function buildEnquiryModal() {
+  const placeholder = document.getElementById('enquiry-modal-placeholder');
+  if (!placeholder) return;
+
+  placeholder.outerHTML = `
+    <div class="modal-overlay" id="enquiryModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h3>Quick Enquiry</h3>
+        <p class="modal-sub">for <strong id="modalProductLabel"></strong></p>
+        <div class="form-grp">
+          <label for="mName">Your Name *</label>
+          <input type="text" id="mName" placeholder="Full name" />
+        </div>
+        <div class="form-grp">
+          <label for="mPhone">Phone *</label>
+          <input type="tel" id="mPhone" placeholder="+91 XXXXX XXXXX" />
+        </div>
+        <div class="form-grp">
+          <label for="mQty">Quantity</label>
+          <select id="mQty">
+            <option>10,000 – 25,000</option>
+            <option>25,000 – 50,000</option>
+            <option>50,000+</option>
+            <option>Custom Qty</option>
+          </select>
+        </div>
+        <div class="form-grp">
+          <label for="mNote">Color / Size Note</label>
+          <input type="text" id="mNote" placeholder="e.g. Green, A4 size, with logo" />
+        </div>
+        <button class="form-submit" onclick="submitModal()">
+          Send Enquiry →
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* ================================================================
+   INIT — runs synchronously when script loads (before script.js)
+================================================================ */
+(function initComponents() {
+  // Wait for DOM to be ready before injecting
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+
+  function inject() {
+    buildNavbar();
+    buildFooter();
+    buildWaFloat();
+    buildAutoPopup();
+    buildEnquiryModal();
+  }
+})();

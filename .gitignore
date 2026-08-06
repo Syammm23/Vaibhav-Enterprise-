@@ -1,0 +1,4 @@
+node_modules/
+generate_bags.js
+package.json
+package-lock.json

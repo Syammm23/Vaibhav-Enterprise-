@@ -457,9 +457,7 @@ h1.hero-title .gold {
 }
 
 /* Legacy selectors — keep for any remaining references */
-.hero-content { display: none; }
-.hero-visual  { display: none; }
-.hero-bg-circle { display: none; }
+
 
 /* ================================================================
    05. SECTIONS & BUTTONS
