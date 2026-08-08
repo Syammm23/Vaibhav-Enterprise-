@@ -128,13 +128,12 @@ function buildFooter() {
             <li><a href="products.html#d-cut">D-Cut Bags</a></li>
             <li><a href="products.html#w-cut">W-Cut Bags</a></li>
             <li><a href="products.html#loop">Loop Handle Bags</a></li>
-            <li><a href="products.html#box">Box Bags</a></li>
           </ul>
         </div>
 
         <div class="fc fc-contact">
           <h4>Contact Us</h4>
-          <div>${SVG.location} B No. 29, Suraj Mall, Opposite Amba Mata Temple<br>Parnera, Atul, Valsad, Gujarat 396020</div>
+          <div>${SVG.location} 29, Suraj Mall, Opp. Amba Mata Temple, Atul, Valsad-396 001.</div>
           <div>${SVG.phone} +91 84015 72902</div>
           <div>${SVG.email} vaibhaventerprise29@gmail.com</div>
         </div>

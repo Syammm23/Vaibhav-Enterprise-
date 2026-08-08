@@ -76,18 +76,21 @@ function changeBagColor(imgId, newImageSrc) {
 
 /* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
-  { img: 'images/D-cut-black.png',         alt: 'Black D-Cut Bag' },
-  { img: 'images/D-cut-blue.png',          alt: 'Blue D-Cut Bag' },
-  { img: 'images/D-cut-Brown.png',         alt: 'Brown D-Cut Bag' },
-  { img: 'images/D-cut-green.png',         alt: 'Green D-Cut Bag' },
-  { img: 'images/D-cut-Pink.png',          alt: 'Pink D-Cut Bag' },
-  { img: 'images/D-cut-red.png',           alt: 'Red D-Cut Bag' },
-  { img: 'images/D-cut-yellow.png',        alt: 'Yellow D-Cut Bag' },
-  { img: 'images/w-cut-white.png',         alt: 'White W-Cut Bag' },
-  { img: 'images/W-cut.png',              alt: 'W-Cut Bag' },
-  { img: 'images/Box bag.png',            alt: 'Box Bag' },
-  { img: 'images/loop handle.png',        alt: 'Loop Handle Bag' },
-  { img: 'images/Manufacturing Unit.webp', alt: 'Manufacturing Unit' },
+  { img: 'images/D-cut-blue.png', alt: 'D-Cut Blue Bag' },
+  { img: 'images/D-cut-red.png', alt: 'D-Cut Red Bag' },
+  { img: 'images/D-cut-green.png', alt: 'D-Cut Green Bag' },
+  { img: 'images/D-cut-yellow.png', alt: 'D-Cut Yellow Bag' },
+  { img: 'images/W-cut-blue.png', alt: 'W-Cut Blue Bag' },
+  { img: 'images/W-cut-red.png', alt: 'W-Cut Red Bag' },
+  { img: 'images/W-cut-green.png', alt: 'W-Cut Green Bag' },
+  { img: 'images/W-cut-orange.png', alt: 'W-Cut Orange Bag' },
+  { img: 'images/Loop-blue.png', alt: 'Loop Handle Blue Bag' },
+  { img: 'images/Loop-red.png', alt: 'Loop Handle Red Bag' },
+  { img: 'images/loop-bag.jpg', alt: 'Loop Handle Bag' },
+  { img: 'images/D-cut-black.png', alt: 'D-Cut Black Bag' },
+  { img: 'images/D-cut-Pink.png', alt: 'D-Cut Pink Bag' },
+  { img: 'images/IMG_4591.JPG', alt: 'Bag Image 14' },
+  { img: 'images/Company.JPG', alt: 'Company Image' }
 ];
 
 function buildGalleryStrip() {
@@ -129,9 +132,9 @@ function closeAutoModal() {
 }
 
 function submitAutoModal() {
-  const name  = document.getElementById('autoName')?.value.trim();
+  const name = document.getElementById('autoName')?.value.trim();
   const phone = document.getElementById('autoPhone')?.value.trim();
-  const req   = document.getElementById('autoReq')?.value.trim();
+  const req = document.getElementById('autoReq')?.value.trim();
   if (!name || !phone) return alert('Please enter your name and phone number.');
   sendWA(`Hi, I'm *${name}*.\nPhone: ${phone}\nRequirement: ${req || 'N/A'}`);
   closeAutoModal();
@@ -152,10 +155,10 @@ function closeModal() {
 }
 
 function submitModal() {
-  const name  = document.getElementById('mName')?.value.trim();
+  const name = document.getElementById('mName')?.value.trim();
   const phone = document.getElementById('mPhone')?.value.trim();
-  const qty   = document.getElementById('mQty')?.value;
-  const note  = document.getElementById('mNote')?.value.trim();
+  const qty = document.getElementById('mQty')?.value;
+  const note = document.getElementById('mNote')?.value.trim();
   if (!name || !phone) return alert('Please enter your name and phone number.');
   sendWA(
     `Hi, I'm *${name}*.\nProduct: *${_product}*\nPhone: ${phone}\nQty: ${qty}\nNote: ${note || 'N/A'}`
@@ -170,15 +173,15 @@ function waEnquire(product) {
 
 /* Contact Page Form */
 function submitForm() {
-  const name    = document.getElementById('cName')?.value.trim();
-  const phone   = document.getElementById('cPhone')?.value.trim();
-  const email   = document.getElementById('cEmail')?.value.trim();
+  const name = document.getElementById('cName')?.value.trim();
+  const phone = document.getElementById('cPhone')?.value.trim();
+  const email = document.getElementById('cEmail')?.value.trim();
   const bagType = document.getElementById('cBagType')?.value;
-  const qty     = document.getElementById('cQty')?.value;
+  const qty = document.getElementById('cQty')?.value;
   const message = document.getElementById('cMessage')?.value.trim();
   if (!name || !phone) return alert('Please provide Name and Phone number.');
   let waMsg = `Hi, I'm *${name}*.\nPhone: ${phone}`;
-  if (email)   waMsg += `\nEmail: ${email}`;
+  if (email) waMsg += `\nEmail: ${email}`;
   waMsg += `\nBag Type: *${bagType}*\nQuantity: ${qty}`;
   if (message) waMsg += `\nMessage: ${message}`;
   sendWA(waMsg);
@@ -186,25 +189,30 @@ function submitForm() {
 
 /* —— 06. Gallery Page Filters & Lightbox —— */
 function initGalleryFilter() {
+  const gItems = document.querySelectorAll('.g-item');
+  const countEl = document.getElementById('galleryCount');
+  
+  // Set initial count
+  if (countEl) countEl.textContent = gItems.length;
+
   document.querySelectorAll('.filter-btn').forEach((btn) => {
     btn.addEventListener('click', function () {
       document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
       this.classList.add('active');
       const filter = this.dataset.filter;
       let visible = 0;
-      document.querySelectorAll('.g-item').forEach((item) => {
+      gItems.forEach((item) => {
         const show = filter === 'all' || item.dataset.cat === filter;
         item.style.display = show ? '' : 'none';
         if (show) visible++;
       });
-      const countEl = document.getElementById('galleryCount');
       if (countEl) countEl.textContent = visible;
     });
   });
 }
 
 function initLightbox() {
-  const lb    = document.getElementById('lightbox');
+  const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lbImg');
   if (!lb || !lbImg) return;
 
