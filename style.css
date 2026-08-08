@@ -630,7 +630,7 @@ section {
    ================================================================ */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 .product-card {
@@ -738,6 +738,25 @@ section {
 }
 .cdot:hover::after {
   opacity: 1;
+}
+
+.color-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.color-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.color-dot:hover {
+  transform: scale(1.15);
+  border-color: #333;
 }
 
 .pc-actions {

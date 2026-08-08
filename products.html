@@ -49,6 +49,8 @@
     <a href="#d-cut" class="quick-jump-link">D-Cut Bag</a>
     <a href="#w-cut" class="quick-jump-link">W-Cut Bag</a>
     <a href="#loop" class="quick-jump-link">Loop Handle Bag</a>
+    <a href="#stitched" class="quick-jump-link">Stitched Bag</a>
+    <a href="#box" class="quick-jump-link">Box Bag</a>
   </div>
 
   <!-- ============================================================
@@ -65,9 +67,12 @@
         <!-- Main product image -->
         <img id="dcut-detail" src="images/D-first.png" alt="D-Cut Non Woven Bag" />
         <!-- Color dots -->
-        <div class="pd-color-section">
-          <div class="pd-dots">
-          </div>
+        <!-- Color dots -->
+        <div class="color-dots" style="justify-content: center; margin-top: 15px;">
+          <span class="color-dot" style="background: #c3272b;" onclick="changeBagColor('dcut-detail', 'images/D-cut-red.png')" title="Red"></span>
+          <span class="color-dot" style="background: #2b5c92;" onclick="changeBagColor('dcut-detail', 'images/D-cut-blue.png')" title="Blue"></span>
+          <span class="color-dot" style="background: #2e7d32;" onclick="changeBagColor('dcut-detail', 'images/D-cut-green.png')" title="Green"></span>
+          <span class="color-dot" style="background: #f9a825;" onclick="changeBagColor('dcut-detail', 'images/D-cut-yellow.png')" title="Yellow"></span>
         </div>
       </div>
 
@@ -186,9 +191,11 @@
       <div class="pd-img-box">
         <span class="pd-badge">Most Popular</span>
         <img id="wcut-detail" src="images/w-cut-red.png" alt="W-Cut Non Woven Bag" />
-        <div class="pd-color-section">
-          <div class="pd-dots">
-          </div>
+        <div class="color-dots" style="justify-content: center; margin-top: 15px;">
+          <span class="color-dot" style="background: #c3272b;" onclick="changeBagColor('wcut-detail', 'images/w-cut-red.png')" title="Red"></span>
+          <span class="color-dot" style="background: #2b5c92;" onclick="changeBagColor('wcut-detail', 'images/w-cut-blue.png')" title="Blue"></span>
+          <span class="color-dot" style="background: #2e7d32;" onclick="changeBagColor('wcut-detail', 'images/w-cut-green.png')" title="Green"></span>
+          <span class="color-dot" style="background: #f9a825;" onclick="changeBagColor('wcut-detail', 'images/w-cut-yellow.png')" title="Yellow"></span>
         </div>
       </div>
 
@@ -297,10 +304,12 @@
     <div id="loop" class="pd-block reveal">
       <div class="pd-img-box">
         <span class="pd-badge gold">Premium</span>
-        <img id="loop-detail" src="images/loop-bag.jpg" alt="Loop Handle Non Woven Bag" />
-        <div class="pd-color-section">
-          <div class="pd-dots">
-          </div>
+        <img id="loop-detail" src="images/loop-yellow.png" alt="Loop Handle Non Woven Bag" />
+        <div class="color-dots" style="justify-content: center; margin-top: 15px;">
+          <span class="color-dot" style="background: #c3272b;" onclick="changeBagColor('loop-detail', 'images/loop-red.png')" title="Red"></span>
+          <span class="color-dot" style="background: #2b5c92;" onclick="changeBagColor('loop-detail', 'images/loop-blue.png')" title="Blue"></span>
+          <span class="color-dot" style="background: #2e7d32;" onclick="changeBagColor('loop-detail', 'images/loop-green.png')" title="Green"></span>
+          <span class="color-dot" style="background: #f9a825;" onclick="changeBagColor('loop-detail', 'images/loop-yellow.png')" title="Yellow"></span>
         </div>
       </div>
 
@@ -398,6 +407,96 @@
           </button>
         </div>
       </div>
+      <!-- ══════════════════════════════════════════════════════════
+         PRODUCT 4 — STITCHED BAG
+         ══════════════════════════════════════════════════════════ -->
+      <div id="stitched" class="pd-block reveal">
+        <div class="pd-img-box">
+          <img id="stitched-detail" src="images/stitched-blue.png" alt="Stitched Bag" />
+          <div class="color-dots" style="justify-content: center; margin-top: 15px;">
+            <span class="color-dot" style="background: #c3272b;" onclick="changeBagColor('stitched-detail', 'images/stitched-red.png')" title="Red"></span>
+            <span class="color-dot" style="background: #2b5c92;" onclick="changeBagColor('stitched-detail', 'images/stitched-blue.png')" title="Blue"></span>
+            <span class="color-dot" style="background: #2e7d32;" onclick="changeBagColor('stitched-detail', 'images/stitched-green.png')" title="Green"></span>
+            <span class="color-dot" style="background: #f9a825;" onclick="changeBagColor('stitched-detail', 'images/stitched-yellow.png')" title="Yellow"></span>
+          </div>
+        </div>
+        <div class="pd-content">
+          <h2>Stitched Bag</h2>
+          <p>
+            Stitched bags offer durability and elegance, customized to suit premium products, events, and brand promotion. 
+          </p>
+
+          <div class="spec-grid">
+            <div class="spec-item"><strong>GSM:</strong> Customizable</div>
+            <div class="spec-item"><strong>Capacity:</strong> Variable</div>
+            <div class="spec-item"><strong>Handle:</strong> Stitched</div>
+            <div class="spec-item"><strong>Gusset:</strong> Optional</div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="pd-actions">
+            <button class="btn btn-green" onclick="openModal('Stitched Bag')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+              Enquire Now
+            </button>
+            <button class="btn-wa-product" onclick="waEnquire('Stitched Bag')">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+              </svg>
+              WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════
+         PRODUCT 5 — BOX BAG
+         ══════════════════════════════════════════════════════════ -->
+      <div id="box" class="pd-block reveal">
+        <div class="pd-img-box">
+          <img id="box-detail" src="images/box-green.png" alt="Box Bag" />
+          <div class="color-dots" style="justify-content: center; margin-top: 15px;">
+            <span class="color-dot" style="background: #c3272b;" onclick="changeBagColor('box-detail', 'images/box-red.png')" title="Red"></span>
+            <span class="color-dot" style="background: #2b5c92;" onclick="changeBagColor('box-detail', 'images/box-blue.png')" title="Blue"></span>
+            <span class="color-dot" style="background: #2e7d32;" onclick="changeBagColor('box-detail', 'images/box-green.png')" title="Green"></span>
+            <span class="color-dot" style="background: #f9a825;" onclick="changeBagColor('box-detail', 'images/box-yellow.png')" title="Yellow"></span>
+          </div>
+        </div>
+        <div class="pd-content">
+          <h2>Box Bag</h2>
+          <p>
+            Box bags are structurally strong, providing a square or rectangular base, perfect for packaging boxes, cakes, or wide items.
+          </p>
+
+          <div class="spec-grid">
+            <div class="spec-item"><strong>GSM:</strong> Customizable</div>
+            <div class="spec-item"><strong>Capacity:</strong> Heavy Duty</div>
+            <div class="spec-item"><strong>Base:</strong> Box type</div>
+            <div class="spec-item"><strong>Print:</strong> Custom Print</div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="pd-actions">
+            <button class="btn btn-green" onclick="openModal('Box Bag')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+              Enquire Now
+            </button>
+            <button class="btn-wa-product" onclick="waEnquire('Box Bag')">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+              </svg>
+              WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
 
@@ -413,7 +512,7 @@
       <div class="stat-label">Happy Clients</div>
     </div>
     <div class="reveal">
-      <div class="stat-num" data-target="4" data-suffix="">0</div>
+      <div class="stat-num" data-target="5" data-suffix="">0</div>
       <div class="stat-label">Bag Varieties</div>
     </div>
     <div class="reveal">

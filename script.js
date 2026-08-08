@@ -89,6 +89,8 @@ const GALLERY_PHOTOS = [
   { img: 'images/loop-bag.jpg', alt: 'Loop Handle Bag' },
   { img: 'images/D-cut-black.png', alt: 'D-Cut Black Bag' },
   { img: 'images/D-cut-Pink.png', alt: 'D-Cut Pink Bag' },
+  { img: 'images/stitched-bag.jpg', alt: 'Stitched Bag' },
+  { img: 'images/box-bag.jpg', alt: 'Box Bag' },
   { img: 'images/IMG_4591.JPG', alt: 'Bag Image 14' },
   { img: 'images/Company.JPG', alt: 'Company Image' }
 ];

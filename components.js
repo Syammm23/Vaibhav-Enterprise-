@@ -128,6 +128,8 @@ function buildFooter() {
             <li><a href="products.html#d-cut">D-Cut Bags</a></li>
             <li><a href="products.html#w-cut">W-Cut Bags</a></li>
             <li><a href="products.html#loop">Loop Handle Bags</a></li>
+            <li><a href="products.html#stitched">Stitched Bags</a></li>
+            <li><a href="products.html#box">Box Bags</a></li>
           </ul>
         </div>
 
