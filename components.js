@@ -69,7 +69,7 @@ function buildNavbar() {
         <li><a href="contact.html" class="nav-cta">Get Quote</a></li>
       </ul>
 
-      <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="nav-wa" title="WhatsApp">
+      <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="nav-wa" title="WhatsApp" aria-label="WhatsApp">
         ${SVG.whatsapp}
       </a>
 
@@ -105,9 +105,9 @@ function buildFooter() {
           </div>
           <p>Manufacturing high-quality, eco-friendly non-woven bags with full customization options. Be Responsible — Choose Vaibhav.</p>
           <div class="footer-socials">
-            <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="social-btn" title="WhatsApp">${SVG.whatsapp}</a>
-            <a href="https://www.instagram.com/vaibhaventerprise2902/" target="_blank" class="social-btn" title="Instagram">${SVG.instagram}</a>
-            <a href="#" class="social-btn" title="Facebook">${SVG.facebook}</a>
+            <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="social-btn" title="WhatsApp" aria-label="WhatsApp">${SVG.whatsapp}</a>
+            <a href="https://www.instagram.com/vaibhaventerprise2902/" target="_blank" class="social-btn" title="Instagram" aria-label="Instagram">${SVG.instagram}</a>
+            <a href="#" class="social-btn" title="Facebook" aria-label="Facebook">${SVG.facebook}</a>
           </div>
         </div>
 
@@ -158,7 +158,7 @@ function buildWaFloat() {
   placeholder.outerHTML = `
     <div class="wa-float">
       <div class="wa-tooltip">Chat with us!</div>
-      <a href="${WA_DEFAULT}" target="_blank" class="wa-float-btn" title="WhatsApp">
+      <a href="${WA_DEFAULT}" target="_blank" class="wa-float-btn" title="WhatsApp" aria-label="Chat with us on WhatsApp">
         ${SVG.whatsapp}
       </a>
     </div>
@@ -182,21 +182,23 @@ function buildAutoPopup() {
         <button class="modal-close" onclick="closeAutoModal()">✕</button>
         <h3>Request a Free Quote</h3>
         <p class="modal-sub">Drop your details — best wholesale price guaranteed.</p>
-        <div class="form-grp">
+        <form onsubmit="event.preventDefault(); submitAutoModal();">
+          <div class="form-grp">
           <label for="autoName">Full Name</label>
-          <input type="text" id="autoName" placeholder="Enter your name" />
+          <input type="text" id="autoName" placeholder="Enter your name" required />
         </div>
         <div class="form-grp">
           <label for="autoPhone">Phone Number</label>
-          <input type="tel" id="autoPhone" placeholder="+91 XXXXX XXXXX" />
+          <input type="tel" id="autoPhone" placeholder="+91 XXXXX XXXXX" required />
         </div>
         <div class="form-grp">
           <label for="autoReq">Bag Requirement</label>
           <input type="text" id="autoReq" placeholder="e.g. 10,000 W-Cut Bags" />
         </div>
-        <button class="form-submit btn-premium" onclick="submitAutoModal()">
-          Send Details via WhatsApp
-        </button>
+          <button type="submit" class="form-submit btn-premium">
+            Send Details via WhatsApp
+          </button>
+        </form>
       </div>
     </div>
   `;
@@ -215,13 +217,14 @@ function buildEnquiryModal() {
         <button class="modal-close" onclick="closeModal()">✕</button>
         <h3>Quick Enquiry</h3>
         <p class="modal-sub">for <strong id="modalProductLabel"></strong></p>
-        <div class="form-grp">
+        <form onsubmit="event.preventDefault(); submitModal();">
+          <div class="form-grp">
           <label for="mName">Your Name *</label>
-          <input type="text" id="mName" placeholder="Full name" />
+          <input type="text" id="mName" placeholder="Full name" required />
         </div>
         <div class="form-grp">
           <label for="mPhone">Phone *</label>
-          <input type="tel" id="mPhone" placeholder="+91 XXXXX XXXXX" />
+          <input type="tel" id="mPhone" placeholder="+91 XXXXX XXXXX" required />
         </div>
         <div class="form-grp">
           <label for="mQty">Quantity</label>
@@ -236,9 +239,10 @@ function buildEnquiryModal() {
           <label for="mNote">Color / Size Note</label>
           <input type="text" id="mNote" placeholder="e.g. Green, A4 size, with logo" />
         </div>
-        <button class="form-submit" onclick="submitModal()">
-          Send Enquiry →
-        </button>
+          <button type="submit" class="form-submit">
+            Send Enquiry →
+          </button>
+        </form>
       </div>
     </div>
   `;
