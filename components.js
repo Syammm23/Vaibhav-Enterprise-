@@ -4,7 +4,7 @@
    Loaded BEFORE script.js so DOM is ready for event listeners.
    ================================================================ */
 
-const WA_NUMBER  = '918401572902';
+const WA_NUMBER  = '919023227934';
 const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20bags`;
 
 /* ── SVG Snippets (single source of truth) ── */
@@ -135,8 +135,8 @@ function buildFooter() {
 
         <div class="fc fc-contact">
           <h4>Contact Us</h4>
-          <div>${SVG.location} 29, Suraj Mall, Opp. Amba Mata Temple, Atul, Valsad-396 001.</div>
-          <div>${SVG.phone} +91 84015 72902</div>
+          <div>${SVG.location} Plot no 2B, Basement, Kusum Park, Near Power House, Atakpardi, Ta Valsad - 396001</div>
+          <div>${SVG.phone} +91 90232 27934</div>
           <div>${SVG.email} vaibhaventerprise29@gmail.com</div>
         </div>
       </div>
