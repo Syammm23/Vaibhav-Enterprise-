@@ -77,13 +77,13 @@ function changeBagColor(imgId, newImageSrc) {
 /* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
   { img: 'images/D-cut-blue.png', alt: 'D-Cut Blue Bag' },
-  { img: 'images/d-cut-red.png', alt: 'D-Cut Red Bag' },
+  { img: 'images/D-cut-red.png', alt: 'D-Cut Red Bag' },
   { img: 'images/D-cut-green.png', alt: 'D-Cut Green Bag' },
   { img: 'images/D-cut-yellow.png', alt: 'D-Cut Yellow Bag' },
   { img: 'images/w-cut-blue.png', alt: 'W-Cut Blue Bag' },
-  { img: 'images/W-cut-red.png', alt: 'W-Cut Red Bag' },
-  { img: 'images/W-cut-green.png', alt: 'W-Cut Green Bag' },
-  { img: 'images/W-cut-orange.png', alt: 'W-Cut Orange Bag' },
+  { img: 'images/w-cut-red.png', alt: 'W-Cut Red Bag' },
+  { img: 'images/w-cut-green.png', alt: 'W-Cut Green Bag' },
+  { img: 'images/w-cut-orange.png', alt: 'W-Cut Orange Bag' },
   { img: 'images/loop-blue.png', alt: 'Loop Handle Blue Bag' },
   { img: 'images/loop-red.png', alt: 'Loop Handle Red Bag' },
   { img: 'images/loop-green.png', alt: 'Loop Handle Bag' },
@@ -91,8 +91,8 @@ const GALLERY_PHOTOS = [
   { img: 'images/D-cut-Pink.png', alt: 'D-Cut Pink Bag' },
   { img: 'images/stitched-red.png', alt: 'Stitched Bag' },
   { img: 'images/box-green.png', alt: 'Box Bag' },
-  { img: 'images/IMG_4591.jpg', alt: 'Bag Image 14' },
-  { img: 'images/Company.jpg', alt: 'Company Image' }
+  { img: 'images/IMG_4591.JPG', alt: 'Bag Image 14' },
+  { img: 'images/Company.JPG', alt: 'Company Image' }
 ];
 
 function buildGalleryStrip() {
