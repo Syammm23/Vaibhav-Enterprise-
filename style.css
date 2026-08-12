@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
    VAIBHAV ENTERPRISE — style.css
    ================================================================ */
 
@@ -318,7 +318,7 @@ nav.scrolled {
   padding: 110px 5% 80px;
   background:
     linear-gradient(160deg, rgba(17,22,19,0.72) 0%, rgba(27,67,50,0.55) 60%, rgba(17,22,19,0.78) 100%),
-    url("images/Company.JPG");
+    url("images/Company.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

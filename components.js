@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
    VAIBHAV ENTERPRISE — components.js
    Shared HTML components injected into every page at runtime.
    Loaded BEFORE script.js so DOM is ready for event listeners.
@@ -57,7 +57,7 @@ function buildNavbar() {
   placeholder.outerHTML = `
     <nav id="mainNav">
       <a href="index.html" class="nav-logo">
-        <img src="images/logo2.png" class="nav-logo-img" alt="Vaibhav Enterprise" />
+        <img src="images/logo2.webp" class="nav-logo-img" alt="Vaibhav Enterprise" />
         <div class="nav-logo-text">
           <span class="brand">Vaibhav</span>
           <span class="tagline">Enterprise · Be Responsible</span>
@@ -97,7 +97,7 @@ function buildFooter() {
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-brand-wrap">
-            <img src="images/logo2.png" class="nav-logo-img" alt="Vaibhav Logo" />
+            <img src="images/logo2.webp" class="nav-logo-img" alt="Vaibhav Logo" />
             <div>
               <div class="footer-brand-name">Vaibhav</div>
               <div class="footer-brand-tagline">ENTERPRISE</div>
@@ -267,3 +267,4 @@ function buildEnquiryModal() {
     buildEnquiryModal();
   }
 })();
+

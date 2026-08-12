@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
    VAIBHAV ENTERPRISE — script.js
    Requires: components.js loaded first (provides WA_NUMBER, SVG, etc.)
    ================================================================ */
@@ -76,23 +76,23 @@ function changeBagColor(imgId, newImageSrc) {
 
 /* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
-  { img: 'images/D-cut-blue.png', alt: 'D-Cut Blue Bag' },
-  { img: 'images/D-cut-red.png', alt: 'D-Cut Red Bag' },
-  { img: 'images/D-cut-green.png', alt: 'D-Cut Green Bag' },
-  { img: 'images/D-cut-yellow.png', alt: 'D-Cut Yellow Bag' },
-  { img: 'images/w-cut-blue.png', alt: 'W-Cut Blue Bag' },
-  { img: 'images/w-cut-red.png', alt: 'W-Cut Red Bag' },
-  { img: 'images/w-cut-green.png', alt: 'W-Cut Green Bag' },
-  { img: 'images/w-cut-orange.png', alt: 'W-Cut Orange Bag' },
-  { img: 'images/loop-blue.png', alt: 'Loop Handle Blue Bag' },
-  { img: 'images/loop-red.png', alt: 'Loop Handle Red Bag' },
-  { img: 'images/loop-green.png', alt: 'Loop Handle Bag' },
-  { img: 'images/D-cut-black.png', alt: 'D-Cut Black Bag' },
-  { img: 'images/D-cut-Pink.png', alt: 'D-Cut Pink Bag' },
-  { img: 'images/stitched-red.png', alt: 'Stitched Bag' },
-  { img: 'images/box-green.png', alt: 'Box Bag' },
-  { img: 'images/IMG_4591.JPG', alt: 'Bag Image 14' },
-  { img: 'images/Company.JPG', alt: 'Company Image' }
+  { img: 'images/D-cut-blue.webp', alt: 'D-Cut Blue Bag' },
+  { img: 'images/D-cut-red.webp', alt: 'D-Cut Red Bag' },
+  { img: 'images/D-cut-green.webp', alt: 'D-Cut Green Bag' },
+  { img: 'images/D-cut-yellow.webp', alt: 'D-Cut Yellow Bag' },
+  { img: 'images/w-cut-blue.webp', alt: 'W-Cut Blue Bag' },
+  { img: 'images/w-cut-red.webp', alt: 'W-Cut Red Bag' },
+  { img: 'images/w-cut-green.webp', alt: 'W-Cut Green Bag' },
+  { img: 'images/w-cut-orange.webp', alt: 'W-Cut Orange Bag' },
+  { img: 'images/loop-blue.webp', alt: 'Loop Handle Blue Bag' },
+  { img: 'images/loop-red.webp', alt: 'Loop Handle Red Bag' },
+  { img: 'images/loop-green.webp', alt: 'Loop Handle Bag' },
+  { img: 'images/D-cut-black.webp', alt: 'D-Cut Black Bag' },
+  { img: 'images/D-cut-Pink.webp', alt: 'D-Cut Pink Bag' },
+  { img: 'images/stitched-red.webp', alt: 'Stitched Bag' },
+  { img: 'images/box-green.webp', alt: 'Box Bag' },
+  { img: 'images/IMG_4591.webp', alt: 'Bag Image 14' },
+  { img: 'images/Company.webp', alt: 'Company Image' }
 ];
 
 function buildGalleryStrip() {
