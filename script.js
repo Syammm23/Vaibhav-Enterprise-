@@ -77,13 +77,13 @@ function changeBagColor(imgId, newImageSrc) {
 /* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
   { img: 'images/D-cut-blue.webp', alt: 'D-Cut Blue Bag' },
-  { img: 'images/D-cut-red.webp', alt: 'D-Cut Red Bag' },
+  { img: 'images/d-cut-red.webp', alt: 'D-Cut Red Bag' },
   { img: 'images/D-cut-green.webp', alt: 'D-Cut Green Bag' },
   { img: 'images/D-cut-yellow.webp', alt: 'D-Cut Yellow Bag' },
   { img: 'images/w-cut-blue.webp', alt: 'W-Cut Blue Bag' },
-  { img: 'images/w-cut-red.webp', alt: 'W-Cut Red Bag' },
-  { img: 'images/w-cut-green.webp', alt: 'W-Cut Green Bag' },
-  { img: 'images/w-cut-orange.webp', alt: 'W-Cut Orange Bag' },
+  { img: 'images/W-cut-red.webp', alt: 'W-Cut Red Bag' },
+  { img: 'images/W-cut-green.webp', alt: 'W-Cut Green Bag' },
+  { img: 'images/W-cut-orange.webp', alt: 'W-Cut Orange Bag' },
   { img: 'images/loop-blue.webp', alt: 'Loop Handle Blue Bag' },
   { img: 'images/loop-red.webp', alt: 'Loop Handle Red Bag' },
   { img: 'images/loop-green.webp', alt: 'Loop Handle Bag' },
@@ -268,3 +268,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 3000);
 });
+
