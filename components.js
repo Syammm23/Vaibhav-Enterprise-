@@ -86,6 +86,28 @@ function buildNavbar() {
 }
 
 /* ================================================================
+   PAGE CHROME — scroll progress bar + back-to-top
+   (har page par inject hota hai, koi HTML change nahi chahiye)
+================================================================ */
+function buildChrome() {
+  if (document.getElementById('scrollProgress')) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  bar.id = 'scrollProgress';
+
+  const top = document.createElement('button');
+  top.className = 'to-top';
+  top.id = 'toTop';
+  top.type = 'button';
+  top.setAttribute('aria-label', 'Back to top');
+  top.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>`;
+
+  document.body.appendChild(bar);
+  document.body.appendChild(top);
+}
+
+/* ================================================================
    FOOTER
 ================================================================ */
 function buildFooter() {
@@ -260,6 +282,7 @@ function buildEnquiryModal() {
   }
 
   function inject() {
+    buildChrome();
     buildNavbar();
     buildFooter();
     buildWaFloat();

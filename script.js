@@ -24,19 +24,23 @@ function closeMobileMenu() {
 }
 
 /* —— 02. Scroll Reveal & Stats Counter —— */
+/* Ek hi row/grid ke items ko thoda-thoda delay dete hain taaki
+   sab ek saath na aayein — cascade effect banta hai. */
 function initReveal() {
   const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
+
   const obs = new IntersectionObserver(
     (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('active');
-          obs.unobserve(e.target);
-        }
+      // same batch ke items ko stagger delay
+      const shown = entries.filter((e) => e.isIntersecting);
+      shown.forEach((e, i) => {
+        e.target.style.transitionDelay = `${Math.min(i, 6) * 80}ms`;
+        e.target.classList.add('active');
+        obs.unobserve(e.target);
       });
     },
-    { threshold: 0.1 }
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
   );
   els.forEach((el) => obs.observe(el));
 }
@@ -44,6 +48,10 @@ function initReveal() {
 function initCounter() {
   const nums = document.querySelectorAll('[data-target]');
   if (!nums.length) return;
+
+  // easeOutExpo — end pe smoothly settle hota hai, linear se zyada premium lagta hai
+  const ease = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
   const obs = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -51,15 +59,16 @@ function initCounter() {
         const el = e.target;
         const target = +el.dataset.target;
         const suffix = el.dataset.suffix ?? '+';
-        let cur = 0;
-        const t = setInterval(() => {
-          cur += target / 60;
-          if (cur >= target) {
-            cur = target;
-            clearInterval(t);
-          }
-          el.textContent = Math.floor(cur) + suffix;
-        }, 20);
+        const dur = 1800;
+        const start = performance.now();
+
+        const step = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          const val = Math.floor(target * ease(p));
+          el.textContent = val.toLocaleString('en-IN') + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
         obs.unobserve(el);
       });
     },
@@ -71,28 +80,114 @@ function initCounter() {
 /* —— 03. Product Color Swap —— */
 function changeBagColor(imgId, newImageSrc) {
   const imgElement = document.getElementById(imgId);
-  if (imgElement) imgElement.src = newImageSrc;
+  if (!imgElement) return;
+  if (imgElement.getAttribute('src') === newImageSrc) return;
+
+  // cross-fade: purani image fade out → nayi load hone par fade in
+  imgElement.classList.add('swapping');
+  const pre = new Image();
+  pre.onload = pre.onerror = () => {
+    imgElement.src = newImageSrc;
+    requestAnimationFrame(() => imgElement.classList.remove('swapping'));
+  };
+  pre.src = newImageSrc;
+}
+
+/* Selected color dot ko highlight karna (event delegation — HTML change nahi chahiye) */
+function initColorDots() {
+  document.querySelectorAll('.color-dots, .pd-dots').forEach((group) => {
+    const dots = group.querySelectorAll('.color-dot, .cdot');
+    if (!dots.length) return;
+    dots[0].classList.add('is-active');
+    group.addEventListener('click', (e) => {
+      const dot = e.target.closest('.color-dot, .cdot');
+      if (!dot || !group.contains(dot)) return;
+      dots.forEach((d) => d.classList.remove('is-active'));
+      dot.classList.add('is-active');
+    });
+  });
+}
+
+/* —— 03b. Micro-interactions —— */
+
+/* Product card par cursor ke peeche chalne wala soft gold spotlight */
+function initCardSpotlight() {
+  if (window.matchMedia('(hover: none)').matches) return;
+  document.querySelectorAll('.product-card').forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+}
+
+/* Features strip ko infinite marquee bana dete hain (content duplicate karke) */
+function initFeatureMarquee() {
+  const strip = document.querySelector('.features-strip');
+  if (!strip || strip.dataset.marquee) return;
+  strip.dataset.marquee = '1';
+
+  const group = document.createElement('div');
+  group.className = 'feat-group';
+  while (strip.firstChild) group.appendChild(strip.firstChild);
+
+  const marquee = document.createElement('div');
+  marquee.className = 'feat-marquee';
+  marquee.appendChild(group);
+  marquee.appendChild(group.cloneNode(true)); // seamless loop ke liye 2nd copy
+  strip.appendChild(marquee);
+}
+
+/* Top scroll-progress bar + back-to-top button */
+function initScrollUI() {
+  const bar = document.getElementById('scrollProgress');
+  const top = document.getElementById('toTop');
+  if (!bar && !top) return;
+
+  let ticking = false;
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const y = window.scrollY;
+    if (bar) bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+    if (top) top.classList.toggle('show', y > 600);
+    ticking = false;
+  };
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    },
+    { passive: true }
+  );
+  top?.addEventListener('click', () =>
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  );
+  update();
 }
 
 /* —— 04. Gallery Strip (Infinite Scroll on Home Page) —— */
 const GALLERY_PHOTOS = [
-  { img: 'images/D-cut-blue.webp', alt: 'D-Cut Blue Bag' },
-  { img: 'images/d-cut-red.webp', alt: 'D-Cut Red Bag' },
-  { img: 'images/D-cut-green.webp', alt: 'D-Cut Green Bag' },
-  { img: 'images/D-cut-yellow.webp', alt: 'D-Cut Yellow Bag' },
-  { img: 'images/w-cut-blue.webp', alt: 'W-Cut Blue Bag' },
-  { img: 'images/W-cut-red.webp', alt: 'W-Cut Red Bag' },
-  { img: 'images/W-cut-green.webp', alt: 'W-Cut Green Bag' },
-  { img: 'images/W-cut-orange.webp', alt: 'W-Cut Orange Bag' },
-  { img: 'images/loop-blue.webp', alt: 'Loop Handle Blue Bag' },
-  { img: 'images/loop-red.webp', alt: 'Loop Handle Red Bag' },
-  { img: 'images/loop-green.webp', alt: 'Loop Handle Bag' },
-  { img: 'images/D-cut-black.webp', alt: 'D-Cut Black Bag' },
-  { img: 'images/D-cut-Pink.webp', alt: 'D-Cut Pink Bag' },
-  { img: 'images/stitched-red.webp', alt: 'Stitched Bag' },
-  { img: 'images/box-green.webp', alt: 'Box Bag' },
-  { img: 'images/IMG_4591.webp', alt: 'Bag Image 14' },
-  { img: 'images/Company.webp', alt: 'Company Image' }
+  { img: 'images/D-cut-blue.webp', alt: 'Blue D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/d-cut-red.webp', alt: 'Red D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/D-cut-green.webp', alt: 'Green D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/D-cut-yellow.webp', alt: 'Yellow D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/w-cut-blue.webp', alt: 'Blue W-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/W-cut-red.webp', alt: 'Red W-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/W-cut-green.webp', alt: 'Green W-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/W-cut-orange.webp', alt: 'Orange W-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/loop-blue.webp', alt: 'Blue Loop Handle non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/loop-red.webp', alt: 'Red Loop Handle non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/loop-green.webp', alt: 'Green Loop Handle non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/D-cut-black.webp', alt: 'Black D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/D-cut-Pink.webp', alt: 'Pink D-Cut non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/stitched-red.webp', alt: 'Red Stitched non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/box-green.webp', alt: 'Green Box non-woven carry bag with custom logo printing by Vaibhav Enterprise' },
+  { img: 'images/Manufacturing Unit.webp', alt: 'Non-woven bag production machines inside the Vaibhav Enterprise manufacturing unit' },
+  { img: 'images/Company.webp', alt: 'Vaibhav Enterprise non-woven bag factory entrance in Atakpardi, Valsad' }
 ];
 
 function buildGalleryStrip() {
@@ -220,9 +315,11 @@ function initLightbox() {
 
   document.querySelectorAll('.g-item').forEach((item) => {
     item.addEventListener('click', function () {
-      const src = this.dataset.src || this.querySelector('img')?.src;
+      const img = this.querySelector('img');
+      const src = this.dataset.src || img?.src;
       if (!src) return;
       lbImg.src = src;
+      lbImg.alt = img?.alt || '';
       toggleModal('lightbox', true);
     });
   });
@@ -238,27 +335,36 @@ function initLightbox() {
 }
 
 /* —— 07. Splash Screen —— */
+/* body.loaded lagne par hero ka staggered entrance start hota hai. */
 function initSplash() {
   const splash = document.getElementById('splashScreen');
-  if (!splash) return;
+  if (!splash) {
+    document.body.classList.add('loaded');
+    return;
+  }
   document.body.style.overflow = 'hidden';
   setTimeout(() => {
     splash.classList.add('hidden');
     document.body.style.overflow = '';
-  }, 3400);
+    document.body.classList.add('loaded');
+  }, 2100);
 }
 
 /* —— 08. Initialization —— */
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
+  initScrollUI();
+  initFeatureMarquee();
   initReveal();
   initCounter();
   initSplash();
   buildGalleryStrip();
   initGalleryFilter();
   initLightbox();
+  initColorDots();
+  initCardSpotlight();
 
-  // Auto popup — show once per session after 3 seconds
+  // Auto popup — show once per session (splash ke baad)
   setTimeout(() => {
     if (!sessionStorage.getItem('autoPopupShown')) {
       openAutoModal();
@@ -266,6 +372,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       document.getElementById('peekingTab')?.classList.remove('hidden');
     }
-  }, 3000);
+  }, 6000);
 });
 

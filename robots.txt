@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Build/tooling folders — koi SEO value nahi
+Disallow: /node_modules/
+Disallow: /.vscode/
+Disallow: /.claude/
+
+Sitemap: https://vaibhaventerprise.com/sitemap.xml
