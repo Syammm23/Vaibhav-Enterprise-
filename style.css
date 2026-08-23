@@ -5000,3 +5000,411 @@ nav.scrolled ~ .quick-jump-bar {
     display: none;
   }
 }
+
+
+/* ================================================================
+   ✦ 21. RESPONSIVE PASS
+   ----------------------------------------------------------------
+   320px se 1440px+ tak audit karke likha gaya. Har fix ke saath
+   wajah likhi hai.
+   ================================================================ */
+
+/* ---------- 21.1 Overflow safety ----------
+   Grid/flex items ka default `min-width: auto` matlab ek lamba
+   unbreakable token (jaise email address ya <select> ka option)
+   track ko viewport se chaura kar deta hai. Contact page 360px par
+   isi wajah se horizontally scroll ho raha tha (379px vs 360px). */
+.contact-grid > *,
+.about-grid > *,
+.pd-block > *,
+.products-grid > *,
+.detail-grid > *,
+.why-grid > *,
+.values-grid > *,
+.gallery-grid > *,
+.footer-grid > * {
+  min-width: 0;
+}
+
+/* Lambe email / address strings ko todne do */
+.contact-detail p,
+.contact-detail a,
+.fc-contact div,
+.footer-brand p {
+  overflow-wrap: anywhere;
+}
+
+/* Form controls apne container se bahar na jaayein */
+.form-grp,
+.form-grp input,
+.form-grp select,
+.contact-form textarea {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ---------- 21.2 Container rhythm ----------
+   5vw chhote phones par sirf 16px deta hai — thoda aur breathing room. */
+@media (max-width: 480px) {
+  :root {
+    --pad-x: 20px;
+    --gutter: 14px;
+  }
+}
+
+/* ---------- 21.3 Pill rows -> swipeable strips ----------
+   360px par gallery ke 7 filter 5 rows le rahe the aur products ka
+   quick-jump bar 166px tall ho raha tha. Ek row me scroll better hai. */
+@media (max-width: 768px) {
+  .filter-wrap,
+  .quick-jump-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* dono kinare par fade — signal ki aur content hai */
+    mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%);
+  }
+  .filter-wrap::-webkit-scrollbar,
+  .quick-jump-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-btn,
+  .quick-jump-link,
+  .quick-jump-label {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+  /* mask ke kinare par pehla/aakhri pill na kate */
+  .filter-wrap,
+  .quick-jump-bar {
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
+    scroll-padding-left: var(--pad-x);
+  }
+  .filter-wrap {
+    margin-inline: calc(var(--pad-x) * -1);
+  }
+}
+
+/* ---------- 21.4 Touch targets ----------
+   Footer links 17px aur breadcrumb 20px tall the — ungli ke liye
+   bahut chhote. Sirf coarse pointers par bada karte hain taaki
+   desktop ka spacing na bigde. */
+@media (pointer: coarse) {
+  .fc ul li {
+    margin-bottom: 2px;
+  }
+  .fc ul li a {
+    display: block;
+    padding: 11px 0;
+    min-height: 40px;
+  }
+  .fc ul li a:hover {
+    padding-left: 6px;
+  }
+  .breadcrumb a,
+  .breadcrumb span {
+    padding: 6px 2px;
+  }
+  .footer-bottom a {
+    display: inline-block;
+    padding: 8px 0;
+  }
+  /* colour swatches ko ungli ke layak banao */
+  .color-dot,
+  .cdot {
+    width: 30px;
+    height: 30px;
+  }
+  .color-dots {
+    gap: 12px;
+  }
+  /* hover-only affordances touch par kaam nahi karte */
+  .wa-tooltip {
+    display: none;
+  }
+}
+
+/* ---------- 21.5 Short / landscape viewports ----------
+   740x360 landscape phone par hero content 518px tha — poora hero
+   do screen le raha tha. Yahan compact kar dete hain. */
+@media (max-height: 560px) and (orientation: landscape) {
+  #hero {
+    min-height: auto;
+    padding-top: 92px;
+    padding-bottom: 44px;
+  }
+  .hero-eyebrow {
+    margin-bottom: 14px;
+    padding: 6px 16px;
+    font-size: 10px;
+  }
+  h1.hero-title {
+    font-size: clamp(26px, 5.4vw, 40px);
+  }
+  .hero-sub {
+    margin: 12px auto 20px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .hero-btns .btn {
+    padding: 11px 22px;
+    font-size: 13.5px;
+  }
+  .hero-trust {
+    margin-top: 22px;
+    padding: 12px 8px;
+  }
+  .trust-num {
+    font-size: 17px;
+  }
+  .hero-scroll {
+    display: none;
+  }
+  .mobile-menu {
+    max-height: calc(100dvh - var(--nav-h));
+    overflow-y: auto;
+  }
+}
+
+/* ---------- 21.6 Tablet (768–1024) ---------- */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .checklist-item {
+    padding: 18px 20px;
+  }
+  .contact-info-card,
+  .contact-form-card {
+    padding: 30px;
+  }
+  .pd-img-box img {
+    height: clamp(240px, 34vw, 320px);
+  }
+}
+
+/* Tablet portrait par about/contact ko ek column me pehle hi tod do,
+   warna 2 columns bahut sanke ho jate hain. */
+@media (max-width: 860px) {
+  .about-grid,
+  .contact-grid,
+  .pd-block {
+    grid-template-columns: 1fr;
+  }
+  .pd-block.reverse {
+    direction: ltr;
+  }
+}
+
+/* ---------- 21.7 Phones ---------- */
+@media (max-width: 600px) {
+  /* 9px nav tagline padha nahi jaata */
+  .nav-logo-text .brand {
+    font-size: 18px;
+  }
+  .nav-logo-text .tagline {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-size: clamp(26px, 7.4vw, 34px);
+  }
+  .section-eye,
+  .page-hero-eye {
+    font-size: 11px;
+  }
+  .trust-lbl {
+    font-size: 11px;
+  }
+  .pc-badge,
+  .pd-badge {
+    font-size: 10.5px;
+    padding: 5px 11px;
+  }
+
+  /* spec table ka first column 120px fix tha — 320px par value
+     column ke liye sirf 156px bachte the */
+  .spec-table td:first-child {
+    width: 92px;
+    white-space: normal;
+    font-size: 12px;
+  }
+  .spec-table td {
+    padding: 11px 6px;
+    font-size: 13px;
+  }
+
+  /* CTA banners mobile par center */
+  .products-cta,
+  .about-cta,
+  .gallery-cta {
+    text-align: center;
+  }
+  .products-cta-btns,
+  .gallery-cta-btns,
+  .about-btns-wrap {
+    width: 100%;
+    justify-content: center;
+  }
+  .products-cta-btns > *,
+  .gallery-cta-btns > * {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  /* side tab pura kinara kha raha tha */
+  .peeking-tab {
+    font-size: 10px;
+    padding: 14px 6px;
+    letter-spacing: 0.08em;
+  }
+
+  .modal {
+    padding: 24px 20px;
+  }
+  .why-card,
+  .value-card {
+    padding: 26px 22px;
+  }
+  .checklist-item {
+    padding: 16px 16px;
+  }
+}
+
+/* ---------- 21.8 Very small phones ---------- */
+@media (max-width: 360px) {
+  .hero-trust {
+    padding: 14px 4px;
+  }
+  .trust-item {
+    padding: 6px 4px;
+  }
+  .trust-num {
+    font-size: 17px;
+  }
+  .trust-lbl {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .btn {
+    padding: 13px 20px;
+    font-size: 14px;
+  }
+  .gallery-item {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* ---------- 21.9 Notch / safe areas ----------
+   Fixed UI ko iPhone ke home indicator aur rounded corners se bachao. */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .wa-float {
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .to-top {
+    left: max(18px, env(safe-area-inset-left));
+    bottom: max(18px, env(safe-area-inset-bottom));
+  }
+  nav,
+  .mobile-menu {
+    padding-left: max(var(--pad-x), env(safe-area-inset-left));
+    padding-right: max(var(--pad-x), env(safe-area-inset-right));
+  }
+}
+
+/* ---------- 21.10 Baaki reh gaye tap targets ----------
+   Audit ke doosre round se: breadcrumb 32px tha aur contact page ka
+   phone link sirf 17px — jabki mobile par wahi sabse zyada tap hota hai. */
+@media (pointer: coarse) {
+  .contact-detail a,
+  .fc-contact a {
+    display: inline-block;
+    padding: 10px 0;
+    min-height: 40px;
+  }
+  .breadcrumb {
+    padding: 4px 14px;
+  }
+  .breadcrumb a {
+    padding: 10px 6px;
+  }
+  .footer-bottom a {
+    padding: 10px 0;
+  }
+}
+
+/* 992px se neeche nav hamburger ban jata hai, to logo ke paas jagah
+   hoti hai — 9px tagline bekaar me chhota tha. */
+@media (max-width: 992px) {
+  .nav-logo-text .tagline {
+    font-size: 10px;
+  }
+}
+
+/* Footer ke phone/email ab links hain — inko baaki footer text jaisa rakho */
+.fc-contact a {
+  color: inherit;
+  transition: color var(--t-fast);
+}
+.fc-contact a:hover {
+  color: var(--gold-light);
+}
+
+/* Gallery phone par 1 column de raha tha — bag photos 2 columns me
+   scan karna kaafi behtar hai. */
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .g-item img {
+    padding: 6px;
+  }
+  .g-overlay {
+    padding: 12px;
+  }
+  .g-overlay span {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+/* Peeking tab phone par content ke right kinare ko permanently dhak
+   raha tha. Mobile par lead capture ke liye WhatsApp float button aur
+   session ka auto-popup kaafi hai.
+   Wapas chahiye ho to bas ye block hata do. */
+@media (max-width: 600px) {
+  .peeking-tab {
+    display: none;
+  }
+}
+
+/* Chhote phones par email address (27 chars) contact row me fit nahi
+   hota tha aur beech se toot jata tha. Icon aur value text thoda
+   compact karke ek line me aa jata hai. */
+@media (max-width: 430px) {
+  .contact-detail {
+    gap: 10px;
+    padding: 12px 10px;
+  }
+  .contact-detail-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+  .contact-detail-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+  .contact-detail p,
+  .contact-detail a {
+    font-size: 13px;
+  }
+}

@@ -158,8 +158,8 @@ function buildFooter() {
         <div class="fc fc-contact">
           <h4>Contact Us</h4>
           <div>${SVG.location} Plot no 2B, Basement, Kusum Park, Near Power House, Atakpardi, Ta Valsad - 396001</div>
-          <div>${SVG.phone} +91 90232 27934</div>
-          <div>${SVG.email} vaibhaventerprise29@gmail.com</div>
+          <div>${SVG.phone} <a href="tel:+919023227934">+91 90232 27934</a></div>
+          <div>${SVG.email} <a href="mailto:vaibhaventerprise29@gmail.com">vaibhaventerprise29@gmail.com</a></div>
         </div>
       </div>
 
