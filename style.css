@@ -5474,3 +5474,28 @@ nav.scrolled ~ .quick-jump-bar {
   color: var(--green);
   border-bottom-color: var(--green);
 }
+
+/* ---------- 21.14 Footer logo ab home link hai ----------
+   Navbar logo jaisa hi behaviour. width:fit-content isliye taaki footer
+   column ki poori khaali chaudai clickable na ho jaye. */
+a.footer-brand-wrap {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  transition: opacity var(--t-fast);
+}
+a.footer-brand-wrap:hover {
+  opacity: 0.95;
+}
+a.footer-brand-wrap .nav-logo-img {
+  transition: transform 0.5s var(--spring);
+}
+a.footer-brand-wrap:hover .nav-logo-img {
+  transform: rotate(-6deg) scale(1.06);
+}
+a.footer-brand-wrap:hover .footer-brand-name {
+  color: var(--gold-light);
+}
+.footer-brand-name {
+  transition: color var(--t-fast);
+}

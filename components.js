@@ -159,13 +159,13 @@ function buildFooter() {
     <footer>
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-brand-wrap">
-            <img src="images/logo2.webp" class="nav-logo-img" alt="Vaibhav Logo" />
+          <a href="index.html" class="footer-brand-wrap" aria-label="Vaibhav Enterprise — Home">
+            <img src="images/logo2.webp" class="nav-logo-img" alt="" />
             <div>
               <div class="footer-brand-name">Vaibhav</div>
               <div class="footer-brand-tagline">ENTERPRISE</div>
             </div>
-          </div>
+          </a>
           <p>Manufacturing high-quality, eco-friendly non-woven bags with full customization options. Be Responsible — Choose Vaibhav.</p>
           <div class="footer-socials">
             ${socialButtons()}
