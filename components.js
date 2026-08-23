@@ -25,6 +25,17 @@ const SVG = {
   email: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
 };
 
+/* ── Address + map link ──
+   MAPS_URL Google ka official maps URL scheme use karta hai: desktop par
+   browser me khulta hai, phone par seedha Google Maps app me.
+   Exact pin chahiye ho (Google Business Profile wala) to bas is constant
+   ko apne "Share" link se badal do — footer aur contact dono uthha lenge. */
+const ADDRESS =
+  'Plot no 2B, Basement, Kusum Park, Near Power House, Atakpardi, Ta Valsad - 396001';
+const MAPS_URL =
+  'https://www.google.com/maps/search/?api=1&query=' +
+  encodeURIComponent('Vaibhav Enterprise, ' + ADDRESS);
+
 /* ── Social profile URLs — badalna ho to sirf yahan badlo ── */
 const INSTAGRAM_URL = 'https://www.instagram.com/vaibhaventerprise2902/';
 
@@ -185,7 +196,7 @@ function buildFooter() {
 
         <div class="fc fc-contact">
           <h4>Contact Us</h4>
-          <div>${SVG.location} Plot no 2B, Basement, Kusum Park, Near Power House, Atakpardi, Ta Valsad - 396001</div>
+          <div>${SVG.location} <a href="${MAPS_URL}" target="_blank" rel="noopener" class="map-link" title="Google Maps me kholo">${ADDRESS}</a></div>
           <div>${SVG.phone} <a href="tel:+919023227934">+91 90232 27934</a></div>
           <div>${SVG.email} <a href="mailto:vaibhaventerprise29@gmail.com">vaibhaventerprise29@gmail.com</a></div>
         </div>
@@ -196,6 +207,21 @@ function buildFooter() {
       </div>
     </footer>
   `;
+}
+
+/* ================================================================
+   MAP LINKS
+   Jis bhi element par data-map hai, use MAPS_URL par point kar dete
+   hain — URL sirf ek jagah (upar MAPS_URL) rehta hai.
+================================================================ */
+function buildMapLinks() {
+  document.querySelectorAll('[data-map]').forEach((el) => {
+    el.setAttribute('href', MAPS_URL);
+    el.setAttribute('target', '_blank');
+    el.setAttribute('rel', 'noopener');
+    el.classList.add('map-link');
+    if (!el.title) el.title = 'Google Maps me kholo';
+  });
 }
 
 /* ================================================================
@@ -329,6 +355,7 @@ function buildEnquiryModal() {
     buildNavbar();
     buildFooter();
     buildContactSocials();
+    buildMapLinks();
     buildWaFloat();
     buildAutoPopup();
     buildEnquiryModal();

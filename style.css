@@ -5427,3 +5427,50 @@ nav.scrolled ~ .quick-jump-bar {
 .contact-socials .social-btn:hover svg {
   fill: #fff;
 }
+
+/* ---------- 21.13 Map link ----------
+   Address ab Google Maps kholta hai, to clickable dikhna chahiye. */
+.map-link {
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+  padding-bottom: 1px;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.map-link::after {
+  /* chhota "bahar khulega" ishaara */
+  content: "↗";
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 0.85em;
+  opacity: 0.55;
+  transform: translateY(-1px);
+  transition: transform 0.25s var(--out), opacity var(--t-fast);
+}
+.map-link:hover::after {
+  transform: translate(2px, -3px);
+  opacity: 1;
+}
+
+/* Footer — halka text, gold par hover */
+.fc-contact .map-link {
+  color: rgba(255, 255, 255, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.22);
+}
+.fc-contact .map-link:hover {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold-light);
+}
+
+/* Contact card — light background */
+.contact-detail .map-link {
+  display: inline-block;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  border-bottom-color: rgba(20, 64, 46, 0.25);
+}
+.contact-detail .map-link:hover {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
