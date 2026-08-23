@@ -5408,3 +5408,22 @@ nav.scrolled ~ .quick-jump-bar {
     font-size: 13px;
   }
 }
+
+/* ---------- 21.12 Contact card ke socials ----------
+   .social-btn footer ke dark background ke liye bana hai (white fill).
+   Contact page ka info card cream hai, to wahan white icons lagbhag
+   invisible the. Yahan dark-on-light variant. */
+.contact-socials .social-btn {
+  background: rgba(20, 64, 46, 0.06);
+  border: 1px solid var(--line-strong);
+}
+.contact-socials .social-btn svg {
+  fill: var(--green);
+}
+.contact-socials .social-btn:hover {
+  background: linear-gradient(140deg, var(--green-mid), var(--green));
+  border-color: transparent;
+}
+.contact-socials .social-btn:hover svg {
+  fill: #fff;
+}

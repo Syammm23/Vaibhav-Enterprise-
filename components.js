@@ -16,14 +16,31 @@ const SVG = {
      bhara hua rounded square ban jata tha aur <line> to dikhta hi nahi tha. */
   instagram: `<svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38C1.35 2.68.93 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13.67.67 1.34 1.08 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.3 1.46-.71 2.13-1.38.67-.67 1.08-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.3-.79-.71-1.46-1.38-2.13C21.32 1.35 20.65.93 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>`,
 
-  facebook: `<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>`,
-
   location: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
 
   phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.06 1.22 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>`,
 
   email: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
 };
+
+/* ── Social links — single source of truth ──
+   Footer aur Contact page dono yahi list use karte hain, taaki dono
+   jagah alag-alag icons na ho jayein. */
+const SOCIALS = [
+  { key: 'whatsapp', label: 'WhatsApp', href: `https://wa.me/${WA_NUMBER}` },
+  {
+    key: 'instagram',
+    label: 'Instagram',
+    href: 'https://www.instagram.com/vaibhaventerprise2902/'
+  }
+];
+
+function socialButtons() {
+  return SOCIALS.map(
+    ({ key, label, href }) =>
+      `<a href="${href}" target="_blank" rel="noopener" class="social-btn" title="${label}" aria-label="${label}">${SVG[key]}</a>`
+  ).join('\n            ');
+}
 
 /* ── Nav links config ── */
 const NAV_LINKS = [
@@ -130,9 +147,7 @@ function buildFooter() {
           </div>
           <p>Manufacturing high-quality, eco-friendly non-woven bags with full customization options. Be Responsible — Choose Vaibhav.</p>
           <div class="footer-socials">
-            <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="social-btn" title="WhatsApp" aria-label="WhatsApp">${SVG.whatsapp}</a>
-            <a href="https://www.instagram.com/vaibhaventerprise2902/" target="_blank" class="social-btn" title="Instagram" aria-label="Instagram">${SVG.instagram}</a>
-            <a href="#" class="social-btn" title="Facebook" aria-label="Facebook">${SVG.facebook}</a>
+            ${socialButtons()}
           </div>
         </div>
 
@@ -170,6 +185,21 @@ function buildFooter() {
         <span>© 2026 Vaibhav Enterprise. All Rights Reserved.</span>
       </div>
     </footer>
+  `;
+}
+
+/* ================================================================
+   CONTACT PAGE SOCIALS
+   Footer jaisi hi list — pehle contact page par sirf WhatsApp tha.
+================================================================ */
+function buildContactSocials() {
+  const placeholder = document.getElementById('contact-socials-placeholder');
+  if (!placeholder) return;
+
+  placeholder.outerHTML = `
+    <div class="contact-socials">
+      ${socialButtons()}
+    </div>
   `;
 }
 
@@ -288,6 +318,7 @@ function buildEnquiryModal() {
     buildChrome();
     buildNavbar();
     buildFooter();
+    buildContactSocials();
     buildWaFloat();
     buildAutoPopup();
     buildEnquiryModal();
