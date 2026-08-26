@@ -40,8 +40,9 @@ const MAPS_URL =
 const INSTAGRAM_URL = 'https://www.instagram.com/vaibhaventerprise2902/';
 
 /* TODO: Facebook page ka asli URL yahan daalo, jaise
-   'https://www.facebook.com/vaibhaventerprise'.
-   Tab tak icon dikhta to hai par click karne par kahin nahi jaata. */
+   'https://www.facebook.com/vaibhaventerprise'. Jab tak ye '#' hai
+   socialButtons() icon ko skip kar deta hai — asli URL daalte hi wapas
+   apne aap dikhne lagega. */
 const FACEBOOK_URL = '#';
 
 /* ── Social links — single source of truth ──
@@ -54,13 +55,12 @@ const SOCIALS = [
 ];
 
 function socialButtons() {
-  return SOCIALS.map(({ key, label, href }) => {
-    // Placeholder href ('#') ko naye tab me kholne ka koi matlab nahi —
-    // wo ek khaali tab khol deta. Sirf asli URLs par target lagao.
-    const external = /^https?:/i.test(href);
-    const attrs = external ? ' target="_blank" rel="noopener"' : '';
-    return `<a href="${href}"${attrs} class="social-btn" title="${label}" aria-label="${label}">${SVG[key]}</a>`;
-  }).join('\n            ');
+  // Jis social ka URL abhi set nahi hua ('#') use render hi nahi karte —
+  // toota icon dikhane se behtar hai ki wo icon hi na ho.
+  return SOCIALS.filter(({ href }) => /^https?:/i.test(href))
+    .map(({ key, label, href }) => {
+      return `<a href="${href}" target="_blank" rel="noopener" class="social-btn" title="${label}" aria-label="${label}">${SVG[key]}</a>`;
+    }).join('\n            ');
 }
 
 /* ── Nav links config ── */
