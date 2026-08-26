@@ -4,7 +4,7 @@
    Loaded BEFORE script.js so DOM is ready for event listeners.
    ================================================================ */
 
-const WA_NUMBER  = '919023227934';
+const WA_NUMBER  = '918401572902';
 const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20bags`;
 
 /* ── SVG Snippets (single source of truth) ── */
@@ -197,7 +197,7 @@ function buildFooter() {
         <div class="fc fc-contact">
           <h4>Contact Us</h4>
           <div>${SVG.location} <a href="${MAPS_URL}" target="_blank" rel="noopener" class="map-link" title="Google Maps me kholo">${ADDRESS}</a></div>
-          <div>${SVG.phone} <a href="tel:+919023227934">+91 90232 27934</a></div>
+          <div>${SVG.phone} <a href="tel:+918401572902">+91 84015 72902</a></div>
           <div>${SVG.email} <a href="mailto:vaibhaventerprise29@gmail.com">vaibhaventerprise29@gmail.com</a></div>
         </div>
       </div>
