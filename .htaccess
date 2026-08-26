@@ -1,0 +1,14 @@
+# URLs extensionless rehte hain: /contact, /about — .html kabhi expose nahi hota.
+# Ye file live server se li gayi hai; ab repo hi iska source of truth hai, to
+# deploy karne se pehle isme kiya gaya koi bhi change soch samajh kar karna.
+
+RewriteEngine On
+
+# Redirect /about.html -> /about
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ %1 [R=301,L,NE]
+
+# Serve about.html when /about is requested
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]

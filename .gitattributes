@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# .htaccess Apache padhta hai — CRLF se directives toot sakte hain
+.htaccess text eol=lf
