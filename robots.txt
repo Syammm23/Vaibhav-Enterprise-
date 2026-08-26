@@ -6,4 +6,4 @@ Disallow: /node_modules/
 Disallow: /.vscode/
 Disallow: /.claude/
 
-Sitemap: https://vaibhaventerprise.com/sitemap.xml
+Sitemap: https://vaibhavbags.com/sitemap.xml
