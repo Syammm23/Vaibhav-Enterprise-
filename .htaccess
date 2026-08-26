@@ -5,6 +5,10 @@
 RewriteEngine On
 
 # Redirect /about.html -> /about
+# Search engine verification files iska exception hain: Google/Bing us exact
+# URL par 200 maangte hain aur redirect milte hi verification fail kar dete
+# hain ("file was not found in the required location").
+RewriteCond %{REQUEST_URI} !^/(google[0-9a-z]+|BingSiteAuth|yandex_[0-9a-z]+)\.html$ [NC]
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
 RewriteRule ^ %1 [R=301,L,NE]
 
