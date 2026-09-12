@@ -92,8 +92,8 @@ require __DIR__ . '/includes/header.php';
         <?php foreach ($items as $item): ?>
           <?php $lineTotal = (float) $item['price'] * (int) $item['qty']; ?>
           <div class="cart-line">
-            <a class="cart-thumb" href="product.php?slug=<?= e($item['slug']) ?>" style="background:<?= e($item['tint']) ?>">
-              <span aria-hidden="true"><?= e($item['emoji']) ?></span>
+            <a class="cart-thumb" href="product.php?slug=<?= e($item['slug']) ?>" style="--tile:<?= e($item['tint']) ?>">
+              <?= product_img($item, 96) ?>
             </a>
 
             <div class="cart-info">

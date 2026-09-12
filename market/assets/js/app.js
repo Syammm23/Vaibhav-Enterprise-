@@ -144,7 +144,8 @@
         html += '<div class="suggest-group"><div class="suggest-label">Products</div>';
         data.products.forEach(function (p) {
           html += '<a href="product.php?slug=' + encodeURIComponent(p.slug) + '">'
-                + '<span class="suggest-thumb" style="background:' + p.tint + '">' + p.emoji + '</span>'
+                + '<span class="suggest-thumb" style="--tile:' + p.tint + '">'
+                + '<img src="' + p.image + '" alt="" width="36" height="36" loading="lazy"></span>'
                 + '<span class="suggest-main"><strong>' + p.name + '</strong><small>' + p.unit + ' · ' + p.category_name + '</small></span>'
                 + '<span class="suggest-price">₹' + p.price + '</span></a>';
         });
@@ -288,15 +289,30 @@
   });
 
   // ------------------------------------------------------- product page
+  // The thumbs restyle the backdrop; the photograph itself never changes.
   $$('[data-pdp-thumb]').forEach(function (thumb) {
     thumb.addEventListener('click', function () {
       $$('[data-pdp-thumb]').forEach(function (t) { t.classList.remove('is-on'); });
       thumb.classList.add('is-on');
-      var stage = $('.pdp-stage');
-      stage.style.background = thumb.getAttribute('data-tint');
-      $('.pdp-emoji', stage).textContent = thumb.getAttribute('data-emoji');
+      $('.pdp-stage').style.setProperty('--tile', thumb.getAttribute('data-tint'));
     });
   });
+
+  // Zoom-on-hover for the product photograph, the way a catalogue site behaves.
+  var stage = $('.pdp-stage');
+  var photo = $('#pdp-photo');
+  if (stage && photo && window.matchMedia('(hover: hover)').matches) {
+    stage.addEventListener('mousemove', function (ev) {
+      var box = stage.getBoundingClientRect();
+      photo.style.transformOrigin =
+        ((ev.clientX - box.left) / box.width * 100) + '% ' + ((ev.clientY - box.top) / box.height * 100) + '%';
+      photo.style.transform = 'scale(1.9)';
+    });
+    stage.addEventListener('mouseleave', function () {
+      photo.style.transform = '';
+      photo.style.transformOrigin = 'center';
+    });
+  }
 
   var pinForm = $('[data-pincode]');
   if (pinForm) {

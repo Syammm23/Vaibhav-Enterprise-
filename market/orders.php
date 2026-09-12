@@ -59,7 +59,7 @@ require __DIR__ . '/includes/header.php';
     </div>
   <?php else: ?>
     <?php foreach ($orders as $o): ?>
-      <?php $lineItems = qa('SELECT emoji, tint, name FROM order_items WHERE order_id = ? LIMIT 5', [$o['id']]); ?>
+      <?php $lineItems = qa('SELECT emoji, tint, name, image, product_id AS id FROM order_items WHERE order_id = ? LIMIT 5', [$o['id']]); ?>
       <div class="order-card">
         <div class="order-head">
           <div>
@@ -76,7 +76,7 @@ require __DIR__ . '/includes/header.php';
         <div class="order-body">
           <div class="order-thumbs">
             <?php foreach ($lineItems as $li): ?>
-              <span style="background:<?= e($li['tint']) ?>" title="<?= e($li['name']) ?>"><?= e($li['emoji']) ?></span>
+              <span style="--tile:<?= e($li['tint']) ?>" title="<?= e($li['name']) ?>"><?= product_img($li, 46) ?></span>
             <?php endforeach; ?>
           </div>
           <div style="flex:1;min-width:160px">

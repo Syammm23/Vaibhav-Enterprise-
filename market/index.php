@@ -39,7 +39,20 @@ require __DIR__ . '/includes/header.php';
             <p><?= e($b['subtitle']) ?></p>
             <a class="btn btn-accent btn-lg" href="<?= e($b['cta_link']) ?>"><?= e($b['cta_text']) ?> →</a>
           </div>
-          <div class="hero-emoji" aria-hidden="true"><?= e($b['emoji']) ?></div>
+          <?php $shots = banner_products($b['category_slug'] ?? null); ?>
+          <div class="hero-shots">
+            <?php if ($shots): ?>
+              <?php foreach ($shots as $n => $shot): ?>
+                <a class="hero-shot hero-shot-<?= $n + 1 ?>" href="product.php?slug=<?= e($shot['slug']) ?>"
+                   style="--tile:<?= e($shot['tint']) ?>">
+                  <?= product_img($shot, 150, '', $i === 0) ?>
+                  <span class="hero-shot-tag"><?= money($shot['price']) ?></span>
+                </a>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <span class="hero-emoji" aria-hidden="true"><?= e($b['emoji']) ?></span>
+            <?php endif; ?>
+          </div>
         </div>
       <?php endforeach; ?>
       <div class="hero-dots">
@@ -81,8 +94,15 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="cat-strip">
       <?php foreach ($topCats as $cat): ?>
+        <?php $shot = category_photo((int) $cat['id']); ?>
         <a class="cat-tile" href="products.php?category=<?= e($cat['slug']) ?>">
-          <span class="ct-emoji" style="background:<?= e($cat['tint']) ?>"><?= e($cat['emoji']) ?></span>
+          <span class="ct-shot<?= $shot ? ' has-photo' : '' ?>" style="--tile:<?= e($cat['tint']) ?>">
+            <?php if ($shot): ?>
+              <?= product_img($shot, 76, '', true) ?>
+            <?php else: ?>
+              <span class="ct-emoji" aria-hidden="true"><?= e($cat['emoji']) ?></span>
+            <?php endif; ?>
+          </span>
           <span><?= e($cat['name']) ?></span>
           <small><?= (int) ($catCounts[(int) $cat['id']] ?? 0) ?> items</small>
         </a>

@@ -248,10 +248,131 @@ function delivery_estimate(): string
     return 'Tomorrow, 7 AM – 10 AM';
 }
 
-/** Product image is generated on the fly — no binary assets to ship. */
-function product_image(array $p, int $size = 400): string
+/**
+ * URL of a product's artwork.
+ *
+ * Products that have a real photograph resolve to assets/products/. The rest
+ * fall back to assets/image.php, which draws a packshot from the product's
+ * package type, brand colour and emoji.
+ */
+function product_image(array $p, int $size = 500): string
 {
-    return 'assets/image.php?e=' . rawurlencode($p['emoji'] ?? '🛒')
-         . '&b=' . rawurlencode(ltrim($p['tint'] ?? '#e8f5ec', '#'))
-         . '&s=' . $size;
+    if (!empty($p['image'])) {
+        return BASE_URL . 'assets/products/' . rawurlencode((string) $p['image']);
+    }
+    if (!empty($p['id'])) {
+        return BASE_URL . 'assets/image.php?p=' . (int) $p['id'] . '&s=' . $size;
+    }
+    return BASE_URL . 'assets/image.php?e=' . rawurlencode($p['emoji'] ?? '🛒')
+         . '&b=' . rawurlencode(ltrim($p['tint'] ?? '#e8f5ec', '#')) . '&s=' . $size;
+}
+
+/**
+ * A complete <img> for a product, sized in CSS pixels.
+ * Everything above the fold should pass $eager so the hero rail does not pop in.
+ */
+function product_img(array $p, int $box, string $class = '', bool $eager = false): string
+{
+    $alt = $p['name'] ?? 'Product';
+    return sprintf(
+        '<img src="%s" alt="%s" width="%d" height="%d" class="%s" loading="%s" decoding="async">',
+        e(product_image($p, $box * 2)), e($alt), $box, $box, e($class), $eager ? 'eager' : 'lazy'
+    );
+}
+
+/** Whether this row is backed by a real photograph rather than generated art. */
+function has_photo(array $p): bool
+{
+    return !empty($p['image']);
+}
+
+// ------------------------------------------------------------------ uploads
+
+/** Package silhouettes assets/image.php knows how to draw. */
+const PACK_TYPES = ['pouch', 'bottle', 'carton', 'box', 'jar', 'tub', 'sack', 'tray', 'bar', 'tube', 'loose'];
+
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+const PRODUCT_IMAGE_PX = 500;
+
+/**
+ * Validate and store an uploaded product photograph.
+ *
+ * The file is never trusted: the type comes from the image data rather than the
+ * filename, the name is built from the product slug, and the bytes are decoded
+ * and re-encoded through GD, so anything hidden inside the original is dropped.
+ *
+ * Returns the stored filename, or null (with $error set) when nothing was saved.
+ */
+function store_product_image(?array $file, string $slug, ?string &$error = null): ?string
+{
+    $error = null;
+
+    if (!$file || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return null;                                     // nothing uploaded is fine
+    }
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $error = $file['error'] === UPLOAD_ERR_INI_SIZE || $file['error'] === UPLOAD_ERR_FORM_SIZE
+            ? 'That file is larger than the server allows.'
+            : 'The upload did not complete. Please try again.';
+        return null;
+    }
+    if ($file['size'] > MAX_UPLOAD_BYTES) {
+        $error = 'Keep the image under ' . (int) (MAX_UPLOAD_BYTES / 1048576) . ' MB.';
+        return null;
+    }
+    if (!is_uploaded_file($file['tmp_name'])) {
+        $error = 'That upload could not be verified.';
+        return null;
+    }
+
+    $info = @getimagesize($file['tmp_name']);
+    $allowed = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP];
+    if ($info === false || !in_array($info[2], $allowed, true)) {
+        $error = 'Upload a JPEG, PNG or WebP image.';
+        return null;
+    }
+    if (!extension_loaded('gd')) {
+        $error = 'The server is missing the gd extension, so images cannot be processed.';
+        return null;
+    }
+
+    $source = @imagecreatefromstring((string) file_get_contents($file['tmp_name']));
+    if ($source === false) {
+        $error = 'That image could not be read.';
+        return null;
+    }
+
+    // Square it on white, then resize — tiles all frame the same way.
+    $w = imagesx($source);
+    $h = imagesy($source);
+    $side = max($w, $h);
+
+    $square = imagecreatetruecolor($side, $side);
+    imagefilledrectangle($square, 0, 0, $side, $side, imagecolorallocate($square, 255, 255, 255));
+    imagecopy($square, $source, (int) (($side - $w) / 2), (int) (($side - $h) / 2), 0, 0, $w, $h);
+
+    $out = imagecreatetruecolor(PRODUCT_IMAGE_PX, PRODUCT_IMAGE_PX);
+    imagefilledrectangle($out, 0, 0, PRODUCT_IMAGE_PX, PRODUCT_IMAGE_PX, imagecolorallocate($out, 255, 255, 255));
+    imagecopyresampled($out, $square, 0, 0, 0, 0, PRODUCT_IMAGE_PX, PRODUCT_IMAGE_PX, $side, $side);
+
+    $dir = __DIR__ . '/../assets/products';
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($source); imagedestroy($square); imagedestroy($out);
+        $error = 'The assets/products folder is not writable.';
+        return null;
+    }
+
+    $webp = function_exists('imagewebp');
+    $name = slugify($slug) . '-' . substr(bin2hex(random_bytes(3)), 0, 6) . ($webp ? '.webp' : '.jpg');
+    $ok   = $webp ? imagewebp($out, $dir . '/' . $name, 86) : imagejpeg($out, $dir . '/' . $name, 88);
+
+    imagedestroy($source);
+    imagedestroy($square);
+    imagedestroy($out);
+
+    if (!$ok) {
+        $error = 'The image could not be saved.';
+        return null;
+    }
+    return $name;
 }

@@ -16,6 +16,7 @@ if (is_post()) {
 
     if ($form === 'save') {
         $id = (int) ($_POST['id'] ?? 0);
+        $uploadError = null;
         $data = [
             'name'        => trim((string) ($_POST['name'] ?? '')),
             'category_id' => (int) ($_POST['category_id'] ?? 0),
@@ -26,6 +27,7 @@ if (is_post()) {
             'stock'       => max(0, (int) ($_POST['stock'] ?? 0)),
             'emoji'       => trim((string) ($_POST['emoji'] ?? '🛒')),
             'tint'        => preg_match('/^#[0-9a-fA-F]{6}$/', (string) ($_POST['tint'] ?? '')) ? $_POST['tint'] : '#e8f5ec',
+            'pack_type'   => in_array($_POST['pack_type'] ?? '', PACK_TYPES, true) ? $_POST['pack_type'] : 'pouch',
             'short_desc'  => trim((string) ($_POST['short_desc'] ?? '')),
             'description' => trim((string) ($_POST['description'] ?? '')),
             'highlights'  => trim((string) ($_POST['highlights'] ?? '')),
@@ -35,11 +37,23 @@ if (is_post()) {
             'is_active'   => !empty($_POST['is_active']) ? 1 : 0,
         ];
 
+        // An uploaded photograph replaces whatever artwork the product had.
+        $upload = store_product_image($_FILES['photo'] ?? null, slugify($data['name']), $uploadError);
+        if ($uploadError !== null) {
+            $errors['photo'] = $uploadError;
+        }
+
         if (mb_strlen($data['name']) < 3)                    $errors['name']  = 'Give the product a name.';
         if ($data['price'] <= 0)                             $errors['price'] = 'Price must be greater than zero.';
         if ($data['mrp'] < $data['price'])                   $errors['mrp']   = 'MRP cannot be lower than the selling price.';
         if (!qv('SELECT id FROM categories WHERE id = ?', [$data['category_id']])) {
             $errors['category_id'] = 'Pick a category.';
+        }
+
+        if ($upload !== null) {
+            $data['image'] = $upload;
+        } elseif (!empty($_POST['remove_photo'])) {
+            $data['image'] = null;
         }
 
         if (!$errors) {
@@ -55,10 +69,12 @@ if (is_post()) {
                 }
                 $sku = 'MKT-' . strtoupper(bin2hex(random_bytes(3)));
                 q('INSERT INTO products (name, slug, sku, category_id, brand_id, unit, price, mrp, stock, emoji, tint,
-                                         short_desc, description, highlights, is_veg, is_organic, is_featured, is_active)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                                         image, pack_type, short_desc, description, highlights,
+                                         is_veg, is_organic, is_featured, is_active)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                   [$data['name'], $slug, $sku, $data['category_id'], $data['brand_id'], $data['unit'],
                    $data['price'], $data['mrp'], $data['stock'], $data['emoji'], $data['tint'],
+                   $data['image'] ?? null, $data['pack_type'],
                    $data['short_desc'], $data['description'], $data['highlights'],
                    $data['is_veg'], $data['is_organic'], $data['is_featured'], $data['is_active']]);
                 flash('Product created.');
@@ -98,7 +114,7 @@ if ($action === 'new' || $action === 'edit') {
       <a class="btn btn-ghost btn-sm" href="products.php">← Back to list</a>
     </div>
 
-    <form method="post" class="panel panel-pad" style="max-width:820px">
+    <form method="post" class="panel panel-pad" style="max-width:820px" enctype="multipart/form-data">
       <?= csrf_field() ?>
       <input type="hidden" name="form" value="save">
       <input type="hidden" name="id" value="<?= (int) ($product['id'] ?? 0) ?>">
@@ -159,17 +175,61 @@ if ($action === 'new' || $action === 'edit') {
         </div>
       </div>
 
-      <div class="field-row">
-        <div class="field">
-          <label for="emoji">Tile emoji</label>
-          <input class="input" id="emoji" name="emoji" maxlength="8" value="<?= $v('emoji', '🛒') ?>">
-          <p class="hint">Product artwork is drawn from this emoji and the tint colour.</p>
+      <!-- ------------------------------------------------------- artwork -->
+      <fieldset style="border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 16px">
+        <legend style="font-size:12px;font-weight:800;color:var(--ink-3);padding:0 6px">PRODUCT PHOTO</legend>
+
+        <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+          <span class="mini-thumb" style="--tile:<?= $v('tint', '#e8f5ec') ?>;width:110px;height:110px;border-radius:var(--r)">
+            <?php if ($product): ?>
+              <?= product_img($product, 110) ?>
+            <?php else: ?>
+              <span class="muted tiny" style="padding:8px;text-align:center">No image yet</span>
+            <?php endif; ?>
+          </span>
+
+          <div style="flex:1;min-width:260px">
+            <div class="field">
+              <label for="photo">Upload a photograph</label>
+              <input class="input <?= isset($errors['photo']) ? 'is-error' : '' ?>" type="file" id="photo" name="photo"
+                     accept="image/jpeg,image/png,image/webp">
+              <p class="hint">JPEG, PNG or WebP up to <?= (int) (MAX_UPLOAD_BYTES / 1048576) ?> MB.
+                 It is squared, resized to 500&times;500 and converted to WebP automatically.</p>
+              <?php if (isset($errors['photo'])): ?><p class="error-text"><?= e($errors['photo']) ?></p><?php endif; ?>
+            </div>
+            <?php if ($product && !empty($product['image'])): ?>
+              <label class="check"><input type="checkbox" name="remove_photo" value="1">
+                <span>Remove the photo and go back to generated artwork</span></label>
+            <?php endif; ?>
+          </div>
         </div>
-        <div class="field">
-          <label for="tint">Tile background</label>
-          <input class="input" id="tint" name="tint" type="color" value="<?= $v('tint', '#e8f5ec') ?>" style="height:44px;padding:5px">
+
+        <p class="hint" style="margin:14px 0 10px">
+          Without a photo the store draws a packshot from the settings below.
+          <code>php tools/import-images.php</code> can fetch real photos from Open Food Facts.
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="pack_type">Package shape</label>
+            <select class="select" id="pack_type" name="pack_type">
+              <?php foreach (PACK_TYPES as $type): ?>
+                <option value="<?= e($type) ?>" <?= ($_POST['pack_type'] ?? $product['pack_type'] ?? 'pouch') === $type ? 'selected' : '' ?>>
+                  <?= e(ucfirst($type)) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div class="field">
+            <label for="emoji">Tile emoji</label>
+            <input class="input" id="emoji" name="emoji" maxlength="8" value="<?= $v('emoji', '🛒') ?>">
+          </div>
+          <div class="field">
+            <label for="tint">Backdrop colour</label>
+            <input class="input" id="tint" name="tint" type="color" value="<?= $v('tint', '#e8f5ec') ?>" style="height:44px;padding:5px">
+          </div>
         </div>
-      </div>
+      </fieldset>
 
       <div class="field">
         <label for="short_desc">Short description</label>
@@ -261,7 +321,7 @@ $rows = qa("SELECT p.*, c.name AS category_name, b.name AS brand_name $sql ORDER
       <?php if (!$rows): ?><tr><td colspan="9" class="muted">No products match that search.</td></tr><?php endif; ?>
       <?php foreach ($rows as $p): ?>
         <tr>
-          <td><span class="mini-thumb" style="background:<?= e($p['tint']) ?>"><?= e($p['emoji']) ?></span></td>
+          <td><span class="mini-thumb" style="--tile:<?= e($p['tint']) ?>"><?= product_img($p, 34) ?></span></td>
           <td class="wrap-cell">
             <strong><?= e($p['name']) ?></strong><br>
             <small class="muted"><?= e($p['sku']) ?> · <?= e($p['unit']) ?><?= $p['brand_name'] ? ' · ' . e($p['brand_name']) : '' ?></small>

@@ -18,10 +18,10 @@ $recentOrders = qa('SELECT o.*, u.name AS customer
                       FROM orders o JOIN users u ON u.id = o.user_id
                   ORDER BY o.placed_at DESC LIMIT 8');
 
-$lowStock = qa('SELECT id, name, unit, stock, emoji, tint FROM products
+$lowStock = qa('SELECT id, name, unit, stock, emoji, tint, image FROM products
                  WHERE is_active = 1 AND stock <= 10 ORDER BY stock ASC LIMIT 8');
 
-$topProducts = qa('SELECT p.name, p.emoji, p.tint, SUM(oi.qty) AS sold, SUM(oi.line_total) AS revenue
+$topProducts = qa('SELECT p.id, p.name, p.emoji, p.tint, p.image, SUM(oi.qty) AS sold, SUM(oi.line_total) AS revenue
                      FROM order_items oi JOIN products p ON p.id = oi.product_id
                      JOIN orders o ON o.id = oi.order_id AND o.status <> "cancelled"
                  GROUP BY p.id ORDER BY sold DESC LIMIT 6');
@@ -86,7 +86,7 @@ foreach (qa('SELECT status, COUNT(*) AS n FROM orders GROUP BY status') as $row)
           <?php endif; ?>
           <?php foreach ($topProducts as $p): ?>
             <tr>
-              <td><span class="mini-thumb" style="background:<?= e($p['tint']) ?>"><?= e($p['emoji']) ?></span></td>
+              <td><span class="mini-thumb" style="--tile:<?= e($p['tint']) ?>"><?= product_img($p, 34) ?></span></td>
               <td class="wrap-cell"><?= e($p['name']) ?></td>
               <td><?= (int) $p['sold'] ?></td>
               <td><?= money($p['revenue']) ?></td>
@@ -119,7 +119,7 @@ foreach (qa('SELECT status, COUNT(*) AS n FROM orders GROUP BY status') as $row)
       <?php endif; ?>
       <?php foreach ($lowStock as $p): ?>
         <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line-2)">
-          <span class="mini-thumb" style="background:<?= e($p['tint']) ?>"><?= e($p['emoji']) ?></span>
+          <span class="mini-thumb" style="--tile:<?= e($p['tint']) ?>"><?= product_img($p, 34) ?></span>
           <span style="flex:1;min-width:0">
             <strong style="font-size:12.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e($p['name']) ?></strong>
             <small class="muted"><?= e($p['unit']) ?></small>

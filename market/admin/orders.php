@@ -94,7 +94,7 @@ if ($viewId > 0) {
             <tbody>
               <?php foreach ($items as $item): ?>
                 <tr>
-                  <td><span class="mini-thumb" style="background:<?= e($item['tint']) ?>"><?= e($item['emoji']) ?></span></td>
+                  <td><span class="mini-thumb" style="--tile:<?= e($item['tint']) ?>"><?= product_img($item, 34) ?></span></td>
                   <td class="wrap-cell"><?= e($item['name']) ?><br><small class="muted"><?= e($item['unit']) ?></small></td>
                   <td><?= money($item['price']) ?></td>
                   <td><?= (int) $item['qty'] ?></td>

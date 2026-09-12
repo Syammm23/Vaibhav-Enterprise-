@@ -9,8 +9,9 @@ $outOfStock = (int) $p['stock'] < 1;
 $saved    = in_wishlist((int) $p['id']);
 ?>
 <article class="card<?= $outOfStock ? ' is-out' : '' ?> <?= e($cardClass ?? '') ?>" data-product="<?= (int) $p['id'] ?>">
-  <a class="card-media" href="product.php?slug=<?= e($p['slug']) ?>" style="background:<?= e($p['tint']) ?>">
-    <span class="card-emoji" aria-hidden="true"><?= e($p['emoji']) ?></span>
+  <a class="card-media<?= has_photo($p) ? ' has-photo' : '' ?>" href="product.php?slug=<?= e($p['slug']) ?>"
+     style="--tile:<?= e($p['tint']) ?>">
+    <?= product_img($p, 220, 'card-photo', !empty($eagerImage)) ?>
     <?php if ($off > 0): ?><span class="card-off"><?= $off ?>% OFF</span><?php endif; ?>
     <?php if ($outOfStock): ?><span class="card-oos">Out of stock</span><?php endif; ?>
     <?php if ((int) $p['is_organic'] === 1): ?><span class="card-organic" title="Certified organic">🌱</span><?php endif; ?>

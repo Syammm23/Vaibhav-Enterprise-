@@ -74,22 +74,24 @@ require __DIR__ . '/includes/header.php';
 
     <!-- ------------------------------------------------------- gallery -->
     <div class="pdp-media">
-      <div class="pdp-stage" style="background:<?= e($product['tint']) ?>">
-        <span class="pdp-emoji" aria-hidden="true"><?= e($product['emoji']) ?></span>
+      <div class="pdp-stage<?= has_photo($product) ? ' has-photo' : '' ?>" style="--tile:<?= e($product['tint']) ?>">
+        <img class="pdp-photo" id="pdp-photo" src="<?= e(product_image($product, 900)) ?>"
+             alt="<?= e($product['name']) ?>" width="520" height="520" fetchpriority="high" decoding="async">
         <?php if ($off > 0): ?><span class="card-off"><?= $off ?>% OFF</span><?php endif; ?>
         <?php if (!$inStock): ?><span class="card-oos">Currently out of stock</span><?php endif; ?>
       </div>
 
       <div class="pdp-thumbs">
         <?php
-        // One product photo per SKU in a demo catalogue, so the extra thumbs are
-        // tint variations of the same artwork rather than fake alternate shots.
+        // A demo catalogue carries one shot per SKU, so the extra thumbs change
+        // the backdrop rather than pretending to be different photographs.
         $tints = [$product['tint'], '#ffffff', '#f4f5f7', '#eef3ff'];
         foreach ($tints as $i => $tint): ?>
           <button class="pdp-thumb<?= $i === 0 ? ' is-on' : '' ?>" type="button"
-                  style="background:<?= e($tint) ?>"
-                  data-pdp-thumb data-tint="<?= e($tint) ?>" data-emoji="<?= e($product['emoji']) ?>"
-                  aria-label="View <?= $i + 1 ?>"><?= e($product['emoji']) ?></button>
+                  style="background:<?= e($tint) ?>" data-pdp-thumb data-tint="<?= e($tint) ?>"
+                  aria-label="Backdrop <?= $i + 1 ?>">
+            <img src="<?= e(product_image($product, 140)) ?>" alt="" width="46" height="46" loading="lazy" decoding="async">
+          </button>
         <?php endforeach; ?>
       </div>
 

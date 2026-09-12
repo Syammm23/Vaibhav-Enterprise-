@@ -6,7 +6,8 @@ file, and the shop runs.
 
 It covers the flow shoppers expect from Amazon or Flipkart: faceted search, a basket
 that survives logging in, coupons, addresses, a payment gateway, order tracking, and
-an admin back office.
+an admin back office — with real product photography, an importer that pulls more of
+it from an open API, and generated packshots wherever a photo is missing.
 
 ---
 
@@ -28,7 +29,7 @@ mysql -u root -p < sql/schema.sql
 ```
 
 The script creates the `market_db` database, all fourteen tables, and a seeded
-catalogue of 90 products across 12 categories.
+catalogue of 111 products across 12 categories.
 
 > The file starts with `SET NAMES utf8mb4` — leave it in place. Without it the emoji
 > used for product artwork import as mojibake.
@@ -129,7 +130,10 @@ market/
 ├── assets/
 │   ├── css/style.css     one stylesheet, sectioned and commented
 │   ├── js/app.js         one script, no dependencies
-│   └── image.php         draws product artwork as SVG from an emoji + tint
+│   ├── image.php         draws a packshot for products with no photograph
+│   └── products/         real product photographs (+ CREDITS.md)
+├── tools/
+│   └── import-images.php fetches real photos from Open Food Facts
 ├── sql/schema.sql        schema + seed data
 └── index.php  products.php  product.php  cart.php  checkout.php
     payment.php  order.php  orders.php  order-success.php
@@ -137,10 +141,34 @@ market/
     login.php  register.php  logout.php
 ```
 
-**Product images are generated, not shipped.** `assets/image.php?e=🍎&b=e6f7ec` returns
-an SVG tile. That keeps the repository free of binary assets and means a new product
-gets artwork the moment you pick an emoji in the admin form. To use real photographs,
-add an `image_path` column and change `product_image()` in `includes/functions.php`.
+### Product images
+
+Three sources, in order of preference:
+
+1. **Real photographs** in `assets/products/`. Thirty-six fresh-produce shots ship
+   with the repository (MIT-licensed — see `assets/products/CREDITS.md`).
+2. **Uploads.** The admin product form takes a JPEG, PNG or WebP, squares it,
+   resizes it to 500×500 and re-encodes it to WebP. The file is validated from its
+   image data rather than its filename and re-encoded through GD, so an uploaded
+   payload cannot survive.
+3. **Generated packshots.** Anything with no photograph is drawn on request by
+   `assets/image.php`, which composes a package silhouette — pouch, bottle, carton,
+   sack, jar, tub, box, tray, bar, tube, or nothing at all for loose produce — in the
+   brand's colour, with the product name and net weight printed on the label.
+
+To fetch real photographs for the packaged brands, run the importer:
+
+```bash
+php tools/import-images.php              # every product that has no image yet
+php tools/import-images.php --dry-run    # show the matches, download nothing
+php tools/import-images.php --only=amul  # just one brand or product
+php tools/import-images.php --all        # re-fetch everything
+```
+
+It queries **Open Food Facts**, a free open database of packaged groceries that needs
+no API key, then squares, resizes and converts each photo and points the product row
+at it. Photos there are CC-BY-SA 3.0, so credit "Open Food Facts contributors" if you
+publish the store. Point the importer at a mirror with `OFF_BASE=https://…`.
 
 ### Database
 
@@ -194,7 +222,7 @@ works without it.
 
 ## Requirements
 
-- PHP 8.0 or newer with `pdo_mysql` (tested on PHP 8.4)
+- PHP 8.0 or newer with `pdo_mysql` and `gd` (tested on PHP 8.4)
 - MySQL 5.7+ or MariaDB 10.3+ (tested on MariaDB 10.11)
 - Any web server — Apache, Nginx, or `php -S localhost:8000` for a quick look
 

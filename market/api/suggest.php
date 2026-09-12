@@ -19,6 +19,7 @@ $products = array_map(static function (array $p): array {
         'slug'          => $p['slug'],
         'emoji'         => $p['emoji'],
         'tint'          => $p['tint'],
+        'image'         => product_image($p, 96),
         'unit'          => $p['unit'],
         'price'         => rtrim(rtrim(number_format((float) $p['price'], 2, '.', ''), '0'), '.'),
         'category_name' => $p['category_name'] ?? '',

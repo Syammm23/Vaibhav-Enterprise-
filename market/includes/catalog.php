@@ -46,6 +46,55 @@ function category_branch_ids(int $categoryId): array
     return array_map('intval', $ids);
 }
 
+/**
+ * A photograph to represent a category tile.
+ *
+ * Only a real photograph is offered: the generated packshots carry a printed
+ * label that turns to mush at tile size, so those categories keep their emoji.
+ */
+function category_photo(int $categoryId): ?array
+{
+    static $cache = [];
+    if (array_key_exists($categoryId, $cache)) {
+        return $cache[$categoryId];
+    }
+
+    $ids   = category_branch_ids($categoryId);
+    $holes = implode(',', array_fill(0, count($ids), '?'));
+
+    return $cache[$categoryId] = q1(
+        "SELECT id, name, emoji, tint, image
+           FROM products
+          WHERE is_active = 1 AND image IS NOT NULL AND category_id IN ($holes)
+       ORDER BY sold_count DESC
+          LIMIT 1",
+        $ids
+    );
+}
+
+/** The handful of products a home-page banner shows off. */
+function banner_products(?string $categorySlug, int $limit = 3): array
+{
+    if (!$categorySlug) {
+        return products(['sort' => 'popularity', 'per_page' => $limit]);
+    }
+    $category = category_by_slug($categorySlug);
+    if (!$category) {
+        return [];
+    }
+    $ids   = category_branch_ids((int) $category['id']);
+    $holes = implode(',', array_fill(0, count($ids), '?'));
+
+    return qa(
+        "SELECT id, name, slug, emoji, tint, image, price, unit
+           FROM products
+          WHERE is_active = 1 AND stock > 0 AND category_id IN ($holes)
+       ORDER BY (image IS NOT NULL) DESC, sold_count DESC
+          LIMIT " . (int) $limit,
+        $ids
+    );
+}
+
 function all_brands(): array
 {
     return qa('SELECT b.*, COUNT(p.id) AS product_count
@@ -217,7 +266,7 @@ function search_suggestions(string $term, int $limit = 8): array
 {
     $like = '%' . trim($term) . '%';
     $products = qa(
-        'SELECT p.name, p.slug, p.emoji, p.tint, p.price, p.unit, c.name AS category_name
+        'SELECT p.id, p.name, p.slug, p.emoji, p.tint, p.image, p.price, p.unit, c.name AS category_name
            FROM products p LEFT JOIN categories c ON c.id = p.category_id
           WHERE p.is_active = 1 AND p.name LIKE ?
        ORDER BY p.sold_count DESC LIMIT ' . (int) $limit,

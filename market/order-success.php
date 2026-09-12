@@ -73,7 +73,7 @@ require __DIR__ . '/includes/header.php';
       </h3>
       <?php foreach ($items as $item): ?>
         <div class="cart-line" style="padding:14px 18px">
-          <span class="cart-thumb" style="background:<?= e($item['tint']) ?>;width:64px;height:64px;font-size:30px"><?= e($item['emoji']) ?></span>
+          <span class="cart-thumb" style="--tile:<?= e($item['tint']) ?>;width:64px;height:64px"><?= product_img($item, 64) ?></span>
           <div class="cart-info">
             <h3><?= e($item['name']) ?></h3>
             <span class="muted tiny"><?= e($item['unit']) ?> · Qty <?= (int) $item['qty'] ?></span>

@@ -118,10 +118,11 @@ if (is_post()) {
                 $orderId = (int) $pdo->lastInsertId();
 
                 foreach ($totals['items'] as $item) {
-                    q('INSERT INTO order_items (order_id, product_id, name, unit, emoji, tint, price, mrp, qty, line_total)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    q('INSERT INTO order_items (order_id, product_id, name, unit, emoji, tint, image, price, mrp, qty, line_total)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                       [$orderId, $item['id'], $item['name'], $item['unit'], $item['emoji'], $item['tint'],
-                       $item['price'], $item['mrp'], $item['qty'], (float) $item['price'] * (int) $item['qty']]);
+                       $item['image'], $item['price'], $item['mrp'], $item['qty'],
+                       (float) $item['price'] * (int) $item['qty']]);
 
                     // Stock is held from here; a cancelled order puts it back.
                     q('UPDATE products SET stock = GREATEST(stock - ?, 0), sold_count = sold_count + ? WHERE id = ?',
@@ -334,8 +335,8 @@ require __DIR__ . '/includes/header.php';
       <div style="padding:14px 18px;display:grid;gap:12px;max-height:280px;overflow-y:auto">
         <?php foreach ($totals['items'] as $item): ?>
           <div style="display:flex;gap:11px;align-items:center">
-            <span style="width:42px;height:42px;border-radius:9px;display:grid;place-items:center;font-size:21px;background:<?= e($item['tint']) ?>">
-              <?= e($item['emoji']) ?>
+            <span class="mini-thumb" style="--tile:<?= e($item['tint']) ?>;width:42px;height:42px">
+              <?= product_img($item, 42) ?>
             </span>
             <span style="flex:1;min-width:0">
               <strong style="display:block;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e($item['name']) ?></strong>
