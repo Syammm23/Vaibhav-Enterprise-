@@ -1,0 +1,45 @@
+# Market storefront — Apache configuration.
+# Everything here is optional; the app runs fine without it.
+
+# Directory listings stay off.
+Options -Indexes
+
+# index.php is the front door.
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Pretty product URLs: /p/shimla-apple-premium
+  RewriteRule ^p/([A-Za-z0-9_-]+)/?$ product.php?slug=$1 [L,QSA]
+
+  # Pretty category URLs: /c/fruits-vegetables
+  RewriteRule ^c/([A-Za-z0-9_-]+)/?$ products.php?category=$1 [L,QSA]
+</IfModule>
+
+# Never serve the config or the SQL dump over HTTP.
+<FilesMatch "\.(sql|md)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_authz_core.c>
+  <Files "config.php">
+    Require all denied
+  </Files>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css              "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/svg+xml         "access plus 30 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
